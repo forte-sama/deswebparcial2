@@ -1,4 +1,12 @@
 
 #contenido {
-    margin-top: 50px;
+    padding-top: 100px;
+}
+
+.texto-centrado {
+    text-align: center;
+}
+
+.texto-izquierda {
+    text-align: left;
 }
