@@ -12,8 +12,8 @@
 
         <div class="collapse navbar-collapse" id="navegacion">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link 2</a></li>
-                <li><a href="#">Link 1</a></li>
+                <li class="active"><a href="/">Link 2</a></li>
+                <li><a href="/">Link 1</a></li>
                 <#--<li class="dropdown">-->
                     <#--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Dropdown</a>-->
                     <#--<ul class="dropdown-menu">-->
