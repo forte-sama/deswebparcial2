@@ -5,6 +5,7 @@ import org.h2.tools.Server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -16,7 +17,6 @@ public class DBService {
     private static final String DB_PASS = "";
 
     static {
-
         //iniciar el servidor H2
         try {
             System.out.println("Inicializando servidor H2...");
@@ -35,7 +35,7 @@ public class DBService {
         return DriverManager.getConnection(URL_CON,DB_USER,DB_PASS);
     }
 
-    public static void test() {
+    public static void inicializar() {
         try {
             Connection con = getConnection();
 

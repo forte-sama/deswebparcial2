@@ -2,9 +2,13 @@ package main;
 
 import freemarker.template.Configuration;
 import modelos.Marca;
+import modelos.PrecioPublicacion;
 import modelos.Tipo;
 import servicios.MarcaServicios;
+import servicios.PrecioPublicacionServicios;
 import servicios.TipoServicios;
+
+import java.util.Calendar;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -21,6 +25,37 @@ public class ManejoFormularios {
         get("/fail", (request, response) -> "fail");
 
         //manejo de llamadas POST
+        //manejo formulario edicion de precio de publicaciones
+        post("/admin/precio_publicacion/editar/", (req, res) -> {
+            String rawPrecio = req.queryParams("precio");
+
+            try {
+                //castear texto de nuevo precio
+                Double precio = Double.parseDouble(rawPrecio);
+
+                //solo seguir si el nuevo precio es positivo (para evitar inconvenientes)
+                if(precio.compareTo(0.0) > 0) {
+                    //construir nuevo precio
+                    PrecioPublicacion pp = new PrecioPublicacion();
+                    pp.setPrecio(precio);
+                    pp.setFechaModificacion(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+
+                    //persistir nuevo precio
+                    PrecioPublicacionServicios.getInstancia().create(pp);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //finalizar redireccionando a la misma pagina
+            res.redirect("/admin/precio_publicacion/editar/");
+
+            return "";
+        });
+
+        //manejo formulario creacion de marca o tipo
         post("/admin/:tipo_target/crear/", (req, res) -> {
             String tipo_target = req.params("tipo_target");
             String texto = req.queryParams("target");
@@ -50,6 +85,7 @@ public class ManejoFormularios {
             return "";
         });
 
+        //manejo formulario edicion de marca o tipo
         post("/admin/:tipo_target/editar/", (req, res) -> {
             String tipo_target = req.params("tipo_target");
             String texto = req.queryParams("target");

@@ -25,7 +25,7 @@ public class Publicacion implements Serializable {
     private String modelo;
     private Integer anio;
     private String transmision;
-    private  Integer uso;
+    private Integer uso;
     private Integer pasajeros;
     private String combustible;
     private Integer cilindros;

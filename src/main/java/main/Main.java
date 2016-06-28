@@ -1,5 +1,7 @@
 package main;
 
+import servicios.PrecioPublicacionServicios;
+
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
@@ -9,6 +11,10 @@ public class Main {
         staticFileLocation("/public");
         //agregar pantalla de debug
         enableDebugScreen();
+        //inicializar servicio H2
+        DBService.inicializar();
+        //inicializar precio base si es primera vez
+        PrecioPublicacionServicios.getInstancia().precioDefault();
 
         //iniciar manejador de templates (GET requests)
         ManejoTemplates.manejarTemplates();

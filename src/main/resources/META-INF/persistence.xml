@@ -10,6 +10,7 @@
         <class>modelos.Publicacion</class>
         <class>modelos.Tipo</class>
         <class>modelos.Imagen</class>
+        <class>modelos.PrecioPublicacion</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/parcial2" />
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
