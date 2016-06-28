@@ -24,27 +24,32 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col col-md-12">
-                            <form class="form-horizontal" action=${form_url} method="post">
+                            <form id="target-form" class="form-horizontal" action="${form_url}" method="post">
                                 <div class="form-group">
-                                    <label for="text-input" class="col-md-2 control-label">${label}: </label>
-                                    <div class="col-md-6">
-                                        <input id="text-input" type="text" name="${field_name}" class="form-control input-lg" placeholder="${label}">
+                                    <div class="row">
+                                        <label for="text-input" class="col-md-3 control-label">ID: </label>
+                                        <div class="col-md-2">
+                                            <input id="text-input" type="text" name="id" class="form-control input-lg" value="${item.getId()}" readonly>
+                                            <hr>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <button id="btn-crear-target" type="submit" class="btn btn-lg btn-default" disabled>Ingresar nuevo elemento</button>
+                                    <div class="row">
+                                        <label for="text-input" class="col-md-3 control-label">${label}: </label>
+                                        <div class="col-md-5">
+                                            <input id="text-input" type="text" name="target" class="form-control input-lg" placeholder="${label}" value="${item.getNombre()}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button id="btn-crear-target" type="submit" class="btn btn-lg btn-default">Guardar cambios</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div id="estado-wait" class="hidden">
-                    <i class="fa fa-refresh fa-spin fa-lg"></i>
-                </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/js/admin_ajax_verificacion_creacion.js"></script>
 </body>
 </html>

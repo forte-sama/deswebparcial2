@@ -21,14 +21,27 @@ public class ManejoFormularios {
         get("/fail", (request, response) -> "fail");
 
         //manejo de llamadas POST
-        post("/admin/marca/crear/", (req, res) -> {
-            String textoMarca = req.queryParams("marca");
+        post("/admin/:tipo_target/crear/", (req, res) -> {
+            String tipo_target = req.params("tipo_target");
+            String texto = req.queryParams("target");
 
-            Marca marca = new Marca();
-            marca.setNombre(textoMarca);
+            boolean exito = true;
 
-            if(MarcaServicios.getInstancia().create(marca)) {
-                res.redirect("/");
+            if(tipo_target.contentEquals("marca")) {
+                Marca marca = new Marca();
+                marca.setNombre(texto);
+
+                exito = MarcaServicios.getInstancia().create(marca);
+            }
+            else if(tipo_target.contentEquals("tipo")) {
+                Tipo tipo = new Tipo();
+                tipo.setNombre(texto);
+
+                exito = TipoServicios.getInstancia().create(tipo);
+            }
+
+            if(exito) {
+                res.redirect("/admin/" + tipo_target + "/crear/");
             }
             else {
                 res.redirect("/fail");
@@ -37,14 +50,30 @@ public class ManejoFormularios {
             return "";
         });
 
-        post("/admin/tipo/crear/", (req, res) -> {
-            String textoTipo = req.queryParams("tipo");
+        post("/admin/:tipo_target/editar/", (req, res) -> {
+            String tipo_target = req.params("tipo_target");
+            String texto = req.queryParams("target");
+            Integer id = Integer.parseInt(req.queryParams("id"));
 
-            Tipo tipo = new Tipo();
-            tipo.setNombre(textoTipo);
+            boolean exito = true;
 
-            if(TipoServicios.getInstancia().create(tipo)) {
-                res.redirect("/");
+            if(tipo_target.contentEquals("marca")) {
+                Marca marca = new Marca();
+                marca.setNombre(texto);
+                marca.setId(id);
+
+                exito = MarcaServicios.getInstancia().edit(marca);
+            }
+            else if(tipo_target.contentEquals("tipo")) {
+                Tipo tipo = new Tipo();
+                tipo.setNombre(texto);
+                tipo.setId(id);
+
+                exito = TipoServicios.getInstancia().edit(tipo);
+            }
+
+            if(exito) {
+                res.redirect("/admin/" + tipo_target + "/crear/");
             }
             else {
                 res.redirect("/fail");

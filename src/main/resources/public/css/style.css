@@ -10,3 +10,8 @@
 .texto-izquierda {
     text-align: left;
 }
+
+.table-scroll {
+    height: 400px;
+    overflow: scroll;
+}
