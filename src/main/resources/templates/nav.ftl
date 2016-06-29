@@ -29,7 +29,6 @@
                 <#--</li>-->
 
                 <#if usuario??>
-
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Cuenta</a>
                             <ul class="dropdown-menu">
@@ -38,7 +37,6 @@
                                <li><a href="javascript:{}" onclick="document.getElementById('my_form').submit();">Cerrar Sesión</a></li>
                             </ul>
                         </li>
-
                 </#if>
 
             </ul>

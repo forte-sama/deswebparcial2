@@ -210,5 +210,11 @@ public class ManejoTemplates {
 
         },new FreeMarkerEngine(conf));
 
+        get("/usuario/registro/", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+            return new ModelAndView(data, "usuario_registro.ftl");
+
+        },new FreeMarkerEngine(conf));
+
     }
 }

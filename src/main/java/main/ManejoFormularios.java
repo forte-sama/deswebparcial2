@@ -140,5 +140,27 @@ public class ManejoFormularios {
             response.redirect("/");
             return "Cesion cerrada";
         });
+
+        post("/usuario/registro/", (request, response) -> {
+            if(!Validation.getInstancia().validarUsuario(request))
+                return "Formulario invalido. Por favor no invente.";
+
+            Usuario usuario = new Usuario();
+            usuario.setUsername(request.queryParams("username"));
+            usuario.setNombre(request.queryParams("nombre"));
+            usuario.setEmail(request.queryParams("email"));
+            usuario.setDireccion(request.queryParams("direccion"));
+            usuario.setTelefono(request.queryParams("telefono"));
+            usuario.setCelular(request.queryParams("celular"));
+            usuario.setPassword(request.queryParams("password"));
+            usuario.setAdmin(false);
+            usuario.setAutorizado(false);
+
+            UsuarioServicios.getInstancia().create(usuario);
+
+            response.redirect("/login/");
+            return "OK";
+        });
+
     }
 }
