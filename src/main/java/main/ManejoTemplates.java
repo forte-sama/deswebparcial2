@@ -226,7 +226,7 @@ public class ManejoTemplates {
 
         },new FreeMarkerEngine(conf));
 
-        get("/publicacion/:pub_id/", (req, res) -> {
+        get("/publicacion/ver/:pub_id/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
 
             String rawId = req.params("pub_id");
