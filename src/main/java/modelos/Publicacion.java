@@ -2,6 +2,7 @@ package modelos;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ public class Publicacion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
     private Double precioPublicacion;
     private Double precioVehiculo;
@@ -158,5 +159,9 @@ public class Publicacion implements Serializable {
 
     public void setObservaciones(String observaciones) {
         Observaciones = observaciones;
+    }
+
+    public String formatFecha(Date rawFecha) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(rawFecha);
     }
 }

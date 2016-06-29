@@ -1,14 +1,8 @@
 package main;
 
 import freemarker.template.Configuration;
-import modelos.Marca;
-import modelos.PrecioPublicacion;
-import modelos.Tipo;
-import modelos.Usuario;
-import servicios.MarcaServicios;
-import servicios.PrecioPublicacionServicios;
-import servicios.TipoServicios;
-import servicios.UsuarioServicios;
+import modelos.*;
+import servicios.*;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -199,5 +193,26 @@ public class ManejoTemplates {
 
             return "";
         });
+
+        get("/publicacion/:pub_id/", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+
+            String rawId = req.params("pub_id");
+
+            try {
+                Integer id = Integer.parseInt(rawId);
+
+                Publicacion p = PublicacionServicios.getInstancia().find(id);
+                List<Imagen> imagenes = ImagenServicios.getInstancia().findByPublicacionId(p.getId());
+
+                data.put("pub",p);
+                data.put("vendedor",p.getUsuario());
+                data.put("imagenes",imagenes);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+            return new ModelAndView(data,"publicacion_detalle.ftl");
+        }, new FreeMarkerEngine(conf));
     }
 }

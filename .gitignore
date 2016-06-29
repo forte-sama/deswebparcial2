@@ -3,3 +3,5 @@
 build/
 out/
 *~
+#TODO Cambiar esto a la ruta de verdad para que las imagenes no se suban a github
+src/main/resources/public/img/

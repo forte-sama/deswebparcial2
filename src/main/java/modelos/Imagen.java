@@ -13,6 +13,7 @@ public class Imagen implements Serializable {
     private Integer id;
     @OneToOne
     private Publicacion publicacion;
+    private String ruta;
 
     public Integer getId() {
         return id;
@@ -28,5 +29,13 @@ public class Imagen implements Serializable {
 
     public void setPublicacion(Publicacion publicacion) {
         this.publicacion = publicacion;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
     }
 }
