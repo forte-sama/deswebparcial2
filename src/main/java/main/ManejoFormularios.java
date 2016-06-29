@@ -4,15 +4,16 @@ import freemarker.template.Configuration;
 import modelos.Marca;
 import modelos.PrecioPublicacion;
 import modelos.Tipo;
+import modelos.Usuario;
 import servicios.MarcaServicios;
 import servicios.PrecioPublicacionServicios;
 import servicios.TipoServicios;
+import servicios.UsuarioServicios;
+import spark.Session;
 
 import java.util.Calendar;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 /**
@@ -116,6 +117,28 @@ public class ManejoFormularios {
             }
 
             return "";
+        });
+
+        post("/login/", (request, response) -> {
+
+            Session session=request.session(true);
+            Usuario usuario = UsuarioServicios.getInstancia().find(request.queryParams("username"));
+
+            if (usuario==null ||!request.queryParams("password").equals(usuario.getPassword())){
+                halt(401,"Credenciales no validas...");
+                return "fail";
+            }
+            else {
+                session.attribute("usuario", usuario);
+                response.redirect("/");
+                return "success";
+            }
+        });
+
+        post("/cerrarsesion/", (request, response) -> {
+            request.session().invalidate();
+            response.redirect("/");
+            return "Cesion cerrada";
         });
     }
 }

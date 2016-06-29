@@ -28,7 +28,11 @@ public class ManejoTemplates {
 
         //manejo de llamadas GET
         get("/", (req, res) -> {
-            return new ModelAndView(null,"_basic.ftl");
+            HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario",usuario_loguiado);
+            return new ModelAndView(data,"_basic.ftl");
         }, new FreeMarkerEngine(conf));
 
         get("/admin/user/ver/", (req, res) -> {
@@ -199,5 +203,12 @@ public class ManejoTemplates {
 
             return "";
         });
+
+        get("/login/", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+            return new ModelAndView(data, "login.ftl");
+
+        },new FreeMarkerEngine(conf));
+
     }
 }
