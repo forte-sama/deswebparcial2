@@ -142,7 +142,7 @@ public class ManejoFormularios {
         });
 
         post("/usuario/registro/", (request, response) -> {
-            if(!Validation.getInstancia().validarUsuario(request))
+            if(!Validation.getInstancia().validarUsuario(request,false))
                 return "Formulario invalido. Por favor no invente.";
 
             Usuario usuario = new Usuario();
@@ -159,6 +159,22 @@ public class ManejoFormularios {
             UsuarioServicios.getInstancia().create(usuario);
 
             response.redirect("/login/");
+            return "OK";
+        });
+
+        post("/usuario/edicion/", (request, response) -> {
+            if(!Validation.getInstancia().validarUsuario(request,true))
+                return "Formulario invalido. Por favor no invente.";
+
+            Usuario usuario = UsuarioServicios.getInstancia().find(request.queryParams("username"));
+            usuario.setNombre(request.queryParams("nombre"));
+            usuario.setEmail(request.queryParams("email"));
+            usuario.setDireccion(request.queryParams("direccion"));
+            usuario.setTelefono(request.queryParams("telefono"));
+            usuario.setCelular(request.queryParams("celular"));
+            UsuarioServicios.getInstancia().edit(usuario);
+
+            response.redirect("/");
             return "OK";
         });
 

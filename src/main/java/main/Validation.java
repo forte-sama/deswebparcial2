@@ -1,5 +1,6 @@
 package main;
 
+import servicios.UsuarioServicios;
 import spark.Request;
 
 import java.util.regex.Matcher;
@@ -24,19 +25,31 @@ public class Validation {
         return instancia;
     }
 
-    public boolean validarUsuario(Request request){
-        if(request.queryParams("username") == null || request.queryParams("password") == null ||
-           request.queryParams("telefono") == null || request.queryParams("celular") == null  ||
-           request.queryParams("email") == null || request.queryParams("direccion") == null )
-            return false;
+    public boolean validarUsuario(Request request, boolean editando){
+        if(!editando){
+            if(request.queryParams("username") == null || request.queryParams("password") == null ||
+                    request.queryParams("telefono") == null || request.queryParams("celular") == null  ||
+                    request.queryParams("email") == null || request.queryParams("direccion") == null )
+                return false;
+        }
+        else{
+                if(request.queryParams("telefono") == null || request.queryParams("celular") == null  ||
+                        request.queryParams("email") == null || request.queryParams("direccion") == null ||
+                        !usuarioExiste(request.queryParams("username")))
+                    return false;
+
+            }
+
 
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(request.queryParams("email"));
         if(!matcher.find())
             return false;
 
         return true;
+    }
 
-
+    public boolean usuarioExiste(String usuario){
+        return UsuarioServicios.getInstancia().find(usuario) != null;
     }
 
 }

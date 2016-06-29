@@ -212,6 +212,22 @@ public class ManejoTemplates {
 
         get("/usuario/registro/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
+            data.put("editando",false);
+            return new ModelAndView(data, "usuario_registro.ftl");
+
+        },new FreeMarkerEngine(conf));
+
+        get("/usuario/edicion/:username", (req, res) -> {
+            String username = req.params("username");
+            if(!Validation.getInstancia().usuarioExiste(username)){
+                res.redirect("/");
+                return null;
+            }
+
+            Usuario usuario = UsuarioServicios.getInstancia().find(username);
+            HashMap<String,Object> data = new HashMap<>();
+            data.put("editando",true);
+            data.put("usuario",usuario);
             return new ModelAndView(data, "usuario_registro.ftl");
 
         },new FreeMarkerEngine(conf));
