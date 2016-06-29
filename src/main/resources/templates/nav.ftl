@@ -1,3 +1,4 @@
+<form id="my_form" method="post" action="/cerrarsesion/">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -11,7 +12,7 @@
         </div>
 
         <div class="collapse navbar-collapse" id="navegacion">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav right">
                 <li class="active"><a href="/">Link 2</a></li>
                 <li><a href="/">Link 1</a></li>
                 <#--<li class="dropdown">-->
@@ -26,7 +27,20 @@
                         <#--<li><a href="#">One more separated link</a></li>-->
                     <#--</ul>-->
                 <#--</li>-->
+
+                <#if usuario??>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Cuenta</a>
+                            <ul class="dropdown-menu">
+                             <li><a href="#">Editar información</a></li>
+                             <li role="separator" class="divider"></li>
+                               <li><a href="javascript:{}" onclick="document.getElementById('my_form').submit();">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                </#if>
+
             </ul>
         </div>
     </div>
 </nav>
+</form>
