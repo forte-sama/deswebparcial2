@@ -22,5 +22,7 @@ public class Main {
         ManejoFormularios.manejarFormularios();
         //iniciar manejador de llamadas AJAX (GET o POST)
         ManejoAjax.manejarAjax();
+        ManejoFiltros ft = new ManejoFiltros();
+        ft.aplicarFiltros();
     }
 }
