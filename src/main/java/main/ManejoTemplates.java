@@ -246,5 +246,14 @@ public class ManejoTemplates {
 
             return new ModelAndView(data,"publicacion_detalle.ftl");
         }, new FreeMarkerEngine(conf));
+
+        get("/publicacion/crear", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+            List<Marca> marcas = MarcaServicios.getInstancia().findAll();
+            Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
+            data.put("marcas",marcas);
+            data.put("usuario",usuario);
+            return new ModelAndView(data,"publicacion_crear.ftl");
+        }, new FreeMarkerEngine(conf));
     }
 }

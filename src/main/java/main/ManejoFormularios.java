@@ -1,10 +1,7 @@
 package main;
 
 import freemarker.template.Configuration;
-import modelos.Marca;
-import modelos.PrecioPublicacion;
-import modelos.Tipo;
-import modelos.Usuario;
+import modelos.*;
 import servicios.MarcaServicios;
 import servicios.PrecioPublicacionServicios;
 import servicios.TipoServicios;
@@ -19,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -185,7 +183,8 @@ public class ManejoFormularios {
             return "OK";
         });
 
-        post("/upload", "multipart/form-data", (request, response) -> {
+        post("/publicar/", "multipart/form-data", (request, response) -> {
+
 
             String location = "src/main/resources/public/img";
             long maxFileSize = 5000000;
@@ -193,7 +192,21 @@ public class ManejoFormularios {
             int fileSizeThreshold = 1024;
             MultipartConfigElement multipartConfigElement = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
             request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+            if(!Validation.getInstancia().validarPublicacion(request,true))
+                return "Formulario invalido";
 
+            Publicacion publicacion = new Publicacion();
+            publicacion.setFechaInicio(new Date());
+            publicacion.setFechaFin(sumarDias(publicacion.getFechaInicio(),Integer.parseInt(request.queryParams("dias"))));
+            publicacion.setUsuario(UsuarioServicios.getInstancia().find(request.queryParams("usuario")));
+            publicacion.setAnio(Integer.parseInt(request.queryParams("anio")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("pasajeros")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("uso")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("cilindros")));
+            publicacion.setCombustible(request.queryParams("combustible"));
+            publicacion.setMarca(MarcaServicios.getInstancia().find(request.queryParams("marca")));
+            publicacion.setModelo(request.queryParams("modelo"));
+            publicacion.setObservaciones(request.queryParams("observaciones"));
 
             Collection<Part> parts = request.raw().getParts();
             for(Part part : parts) {
@@ -220,4 +233,13 @@ public class ManejoFormularios {
             return "OK";
         });
     }
+
+     public static Date sumarDias(Date date, int days)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, days);
+            return cal.getTime();
+        }
+
 }
