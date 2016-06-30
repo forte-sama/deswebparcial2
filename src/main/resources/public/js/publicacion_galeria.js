@@ -17,22 +17,6 @@ $(document).ready(function () {
         $("#imagen-modal").attr("src", ruta_imagen);
     });
 
-    generar_eventos();
-});
-
-function generar_eventos() {
-    $(".btn-responder").click(function (e) {
-        e.preventDefault();
-
-        comentario_respuesta_actual = $(this).data("comentario-id");
-        var comentario_usuario = $(this).data("comentario-usuario");
-
-        modal_form_respuesta.find("#titulo-form-respuesta").html(comentario_usuario);
-        modal_form_respuesta.modal("show");
-
-        modal_form_respuesta.find("input,textarea").val("");
-    });
-
     $("#form-nuevo-comentario").submit(function (e) {
         e.preventDefault();
 
@@ -69,18 +53,42 @@ function generar_eventos() {
 
         postearComentario(datos_form);
     });
+    
+    updateBotones();
+});
+
+function updateBotones() {
+    $(".btn-responder").click(function (e) {
+        e.preventDefault();
+
+        comentario_respuesta_actual = $(this).data("comentario-id");
+        var comentario_usuario = $(this).data("comentario-usuario");
+
+        modal_form_respuesta.find("#titulo-form-respuesta").html(comentario_usuario);
+        modal_form_respuesta.modal("show");
+
+        modal_form_respuesta.find("input,textarea").val("");
+    });
 }
 
 function postearComentario(datos_formulario) {
+    //presentar animacion de espera
     var animacion_espera = $("#animacion-espera").clone();
     animacion_espera.toggleClass("hidden");
     $("#seccion-comentarios").html(animacion_espera.html());
+    //ocultar modal de formulario de respuesta
+    $("#form-respuesta-modal").modal("hide");
 
+    //llamada asincronica para postear nuevo comentario de respuesta
     $.post({
         url: '/comentario/nuevo/',
         data: datos_formulario,
         success: function(data) {
-            //TODO PONER COMENTARIO DE RESPUESTA MANUALMENTE AQUI
+            //para simular que se toma un tiempo
+            setTimeout(function () {
+                $("#seccion-comentarios").html(data);
+                updateBotones();
+            },1500);
         },
         error: function () {
             // obtenerSeccionComentarios(id_pub);

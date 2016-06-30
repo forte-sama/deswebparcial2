@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.h2.server.web.PageParser.escapeHtml;
 import static spark.Spark.after;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -99,8 +100,8 @@ public class ManejoAjax {
         post("/comentario/nuevo/", (req, res) -> {
             //obtener datos provenientes de llamada post
             String rawIdPublicacion = req.queryParams("publicacion_id");
-            String usuario = req.queryParams("usuario");
-            String cuerpo = req.queryParams("cuerpo");
+            String usuario = escapeHtml(req.queryParams("usuario"));
+            String cuerpo = escapeHtml(req.queryParams("cuerpo"));
             String rawIdComentarioPadre = req.queryParams("comentario_padre");
 
             //construir nuevo comentario
@@ -113,7 +114,6 @@ public class ManejoAjax {
                 Integer idPublicacion = Integer.parseInt(rawIdPublicacion);
                 //publicacion correspondiente
                 Publicacion pub = PublicacionServicios.getInstancia().find(idPublicacion);
-
                 //pub nunca puede ser null
                 comentario.setPublicacion(pub);
 

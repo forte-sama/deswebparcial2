@@ -161,8 +161,28 @@
                                 </div>
                             </div>
                             <#-- comentarios -->
-                            <div id="seccion-comentarios" class="row" pub="${pub.getId()?string["0"]}">
-                                <#include "comentarios.ftl">
+                            <div class="row">
+                                <div class="col col-lg-12">
+                                    <div class="alert alert-warning">
+                                        <form id="form-nuevo-comentario" class="form" method="post">
+                                            <div class="form-group">
+                                                <label for="nombre">Nombre:</label>
+                                                <input type="text" class="form-control" id="nombre" placeholder="juan nieve">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="text-input" class="control-label">Nuevo Comentario: </label>
+                                                <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito"></textarea>
+                                                <br />
+                                                <button id="btn-form-nuevo-comentario" type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-paper-plane" aria-hidden="true"></i> Comentar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="seccion-comentarios" class="col col-lg-12" pub="${pub.getId()?string["0"]}">
+                                    <#include "comentarios.ftl">
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -171,8 +191,8 @@
         </div>
     </div>
 </div>
-<div id="galeria-modal" class="modal fade" tabindex="-1" role="dialog"">
-    <img id="imagen-modal" src="/img/img_prueba1.jpg" alt="Imagen Full Size"/>
+<div id="galeria-modal" class="modal fade" tabindex="-1" role="dialog">
+    <img id="imagen-modal" src="" alt="Imagen Full Size"/>
 </div>
 <div id="form-respuesta-modal" class="modal fade" tabindex="-1" role="dialog"">
     <div class="modal-dialog">
@@ -205,6 +225,6 @@
         </div>
     </div>
 </div>
-<#--<script type="text/javascript" src="/js/publicacion_galeria.js"></script>-->
+<script type="text/javascript" src="/js/publicacion_galeria.js"></script>
 </body>
 </html>
