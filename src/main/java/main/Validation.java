@@ -56,7 +56,7 @@ public class Validation {
         if(request.queryParams("marca") == null || request.queryParams("modelo") == null || request.queryParams("anio") == null||
                 request.queryParams("uso") == null || request.queryParams("pasajeros") ==null || request.queryParams("cilindros") == null ||
                 request.queryParams("combustible") == null || request.queryParams("transmision") == null || request.queryParams("observaciones") == null||
-                request.queryParams("dias") == null){
+                request.queryParams("dias") == null || request.queryParams("tipo") == null){
             System.out.println("Null value");
             return false;
         }
@@ -64,7 +64,7 @@ public class Validation {
         if(!isInteger(request.queryParams("dias")) || !isInteger(request.queryParams("uso")) ||
                 !isInteger(request.queryParams("cilindros")) || !isInteger(request.queryParams("anio")) ||
                 !isInteger(request.queryParams("pasajeros"))){
-            System.out.println("Fucked integer value");
+            System.out.println("bad integer value");
             return  false;
         }
 

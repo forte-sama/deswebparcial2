@@ -21,7 +21,7 @@
                                 <label for="marca">Marca</label>
                                 <select class="form-control"   name="marca"  id="marca">
                                     <#list marcas as m>
-                                        <option value="${m.nombre}">${m.nombre}</option>
+                                        <option value="${m.id}">${m.nombre}</option>
                                     </#list>
                                 </select>
                                 <br>
@@ -44,6 +44,20 @@
                                     <option value="Metanol">Metanol</option>
 
                                 </select>
+                                <br>
+                                <label for="precio">Precio</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">RD$</span>
+                                    <input  name="precio" type="text" id="precio" class="form-control"   required="" autofocus="">
+                                </div>
+                                <label for="tipo">Tipo</label>
+                                <br>
+                                <select class="form-control"   name="tipo"  id="tipo">
+                                    <#list tipos as t>
+                                        <option value="${t.id}">${t.nombre}</option>
+                                    </#list>
+                                </select>
+                                <br>
                             </div>
                             <div class="col-md-6">
                                 <label for="modelo">Modelo</label>
@@ -60,12 +74,17 @@
                                 <br>
                                 <label for="transmision">Tipo de Transmisión</label>
                                 <select class="form-control"   name="transmision"  id="transmision">
-                                    <option value="Autmática">Automática</option>
+                                    <option value="Automática">Automática</option>
                                     <option value="Manual">Manual</option>
                                     <option value="Doble embrague">Doble embrague</option>
                                     <option value="Semi-automática">Semi-automática</option>
                                 </select>
-
+                                <br>
+                                <label for="observaciones">Duración de publicación</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Días</span>
+                                    <input  name="dias" type="text" id="dias" class="form-control"   required="" autofocus="">
+                                </div>
                             </div>
                         </div>
 
@@ -90,11 +109,7 @@
 
                         <div class="row">
                             <div class="col col-lg-4 col-lg-offset-4">
-                                <label for="observaciones">Duración de publicación</label>
-                                <div class="input-group">
-                                <span class="input-group-addon">Días</span>
-                                <input  name="dias" type="text" id="dias" class="form-control"   required="" autofocus="">
-                                </div>
+
                                 </div>
                         </div>
 
@@ -108,33 +123,8 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    var cantidad_img = 0;
-    $('#add-image').click(function () {
-        html = '<div class="fileUpload btn btn-primary">'
-                +'<span>Seleccionar...</span>'
-                +'<input name="upfile" type="file" class="upload" value="'+cantidad_img+'" onchange="readURL(this,'+cantidad_img+');" />'
-                +'</div>';
-        html += '<img style="padding-top: 15px" id="blah'+cantidad_img+'" src="" alt="" />';
-        $('#contenedor-imagenes').append(html);
-        cantidad_img+=1;
+<script src="/js/imagenes.js" type="text/javascript">
 
-    });
-    function readURL(input,number) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                console.log('hey');
-                $('#blah'+number)
-                        .attr('src', e.target.result)
-                        .width(180)
-                        .height(115);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 
 </script>
 </body>

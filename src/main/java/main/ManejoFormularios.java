@@ -2,10 +2,8 @@ package main;
 
 import freemarker.template.Configuration;
 import modelos.*;
-import servicios.MarcaServicios;
-import servicios.PrecioPublicacionServicios;
-import servicios.TipoServicios;
-import servicios.UsuarioServicios;
+import org.apache.commons.io.FilenameUtils;
+import servicios.*;
 import spark.Session;
 
 import javax.servlet.MultipartConfigElement;
@@ -17,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -194,22 +193,38 @@ public class ManejoFormularios {
             request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
             if(!Validation.getInstancia().validarPublicacion(request,true))
                 return "Formulario invalido";
+            Collection<Part> parts = request.raw().getParts();
+            for(Part part : parts) {
+                if(!part.getName().equals("upfile"))
+                    continue;
 
+                String extension = tipoArchivo(part.getSubmittedFileName());
+                if(!extension.toLowerCase().equals("png") && !extension.toLowerCase().equals("jpg") && !extension.toLowerCase().equals("gif"))
+                    return "Formato de imagen no soportado.";
+
+            }
             Publicacion publicacion = new Publicacion();
             publicacion.setFechaInicio(new Date());
             publicacion.setFechaFin(sumarDias(publicacion.getFechaInicio(),Integer.parseInt(request.queryParams("dias"))));
             publicacion.setUsuario(UsuarioServicios.getInstancia().find(request.queryParams("usuario")));
             publicacion.setAnio(Integer.parseInt(request.queryParams("anio")));
             publicacion.setPasajeros(Integer.parseInt(request.queryParams("pasajeros")));
-            publicacion.setPasajeros(Integer.parseInt(request.queryParams("uso")));
-            publicacion.setPasajeros(Integer.parseInt(request.queryParams("cilindros")));
+            publicacion.setUso(Integer.parseInt(request.queryParams("uso")));
+            publicacion.setCilindros(Integer.parseInt(request.queryParams("cilindros")));
             publicacion.setCombustible(request.queryParams("combustible"));
-            publicacion.setMarca(MarcaServicios.getInstancia().find(request.queryParams("marca")));
+            publicacion.setMarca(MarcaServicios.getInstancia().find(Integer.parseInt(request.queryParams("marca"))));
             publicacion.setModelo(request.queryParams("modelo"));
             publicacion.setObservaciones(request.queryParams("observaciones"));
+            publicacion.setTransmision(request.queryParams("transmision"));
+            publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));
+            publicacion.setTipo(TipoServicios.getInstancia().find(Integer.parseInt(request.queryParams("tipo"))));
+            publicacion.setPrecioPublicacion(PrecioPublicacionServicios.getInstancia().precioActual().getPrecio()*Integer.parseInt(request.queryParams("dias")));
+            PublicacionServicios.getInstancia().create(publicacion);
 
-            Collection<Part> parts = request.raw().getParts();
+
+            int i = 0;
             for(Part part : parts) {
+
                 if(!part.getName().equals("upfile"))
                     continue;
                 System.out.println("Name:");
@@ -218,10 +233,22 @@ public class ManejoFormularios {
                 System.out.println(part.getSize());
                 System.out.println("Filename:");
                 System.out.println(part.getSubmittedFileName());
-                String fName = part.getSubmittedFileName();
-                Path out = Paths.get("src/main/resources/public/img/"+fName);
+                String extension = tipoArchivo(part.getSubmittedFileName());
+
+
+
+                String ruta = "src/main/resources/public/img/"+publicacion.getId()+"_" + i + "." + extension;
+                Path out = Paths.get(ruta);
                 try (final InputStream in = part.getInputStream()) {
                     Files.copy(in, out);
+                    System.out.print(part.getSubmittedFileName());
+
+                    String rutaDB = "/img/"+publicacion.getId()+"_" + i + "." + extension;
+                    Imagen imagen = new Imagen();
+                    imagen.setPublicacion(publicacion);
+                    imagen.setRuta(rutaDB);
+                    ImagenServicios.getInstancia().create(imagen);
+                    i++;
                     part.delete();
 
                 }
@@ -241,5 +268,9 @@ public class ManejoFormularios {
             cal.add(Calendar.DATE, days);
             return cal.getTime();
         }
+    public static String tipoArchivo(String file){
+        String ext = FilenameUtils.getExtension(file);
+        return ext;
+    }
 
 }

@@ -250,9 +250,11 @@ public class ManejoTemplates {
         get("/publicacion/crear", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
             List<Marca> marcas = MarcaServicios.getInstancia().findAll();
+            List<Tipo> tipos = TipoServicios.getInstancia().findAll();
             Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
             data.put("marcas",marcas);
             data.put("usuario",usuario);
+            data.put("tipos",tipos);
             return new ModelAndView(data,"publicacion_crear.ftl");
         }, new FreeMarkerEngine(conf));
     }
