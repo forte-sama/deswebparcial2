@@ -2,8 +2,89 @@
  * Created by forte on 29/06/16.
  */
 
+var id_pub = $("#seccion-comentarios").attr("pub");
+var comentario_respuesta_actual;
+var modal_form_respuesta = $("#form-respuesta-modal");
+
 $(document).ready(function () {
+
     $("#imagen-modal").click(function () {
         $("#galeria-modal").modal("hide");
     });
+
+    $(".imagen-publicacion").click(function () {
+        var ruta_imagen = $(this).find("img").first().attr("src");
+        $("#imagen-modal").attr("src", ruta_imagen);
+    });
+
+    generar_eventos();
 });
+
+function generar_eventos() {
+    $(".btn-responder").click(function (e) {
+        e.preventDefault();
+
+        comentario_respuesta_actual = $(this).data("comentario-id");
+        var comentario_usuario = $(this).data("comentario-usuario");
+
+        modal_form_respuesta.find("#titulo-form-respuesta").html(comentario_usuario);
+        modal_form_respuesta.modal("show");
+
+        modal_form_respuesta.find("input,textarea").val("");
+    });
+
+    $("#form-nuevo-comentario").submit(function (e) {
+        e.preventDefault();
+
+        var input_nombre_usuario = $(this).find("input#nombre");
+        var input_cuerpo = $(this).find("textarea[name=cuerpo]");
+
+        modal_form_respuesta.modal("hide");
+
+        var datos_form = {};
+        datos_form.usuario = input_nombre_usuario.val();
+        datos_form.cuerpo = input_cuerpo.val();
+        datos_form.publicacion_id = id_pub;
+
+        input_nombre_usuario.val("");
+        input_cuerpo.val("");
+
+        postearComentario(datos_form);
+    });
+
+    $("#form-respuesta-comentario").submit(function (e) {
+        e.preventDefault();
+
+        var input_nombre_usuario = $(this).find("input#nombre");
+        var input_cuerpo = $(this).find("textarea[name=cuerpo]");
+
+        var datos_form = {};
+        datos_form.usuario = input_nombre_usuario.val();
+        datos_form.cuerpo = input_cuerpo.val();
+        datos_form.publicacion_id = id_pub;
+        datos_form.comentario_padre = comentario_respuesta_actual;
+
+        input_nombre_usuario.val("");
+        input_cuerpo.val("");
+
+        postearComentario(datos_form);
+    });
+}
+
+function postearComentario(datos_formulario) {
+    var animacion_espera = $("#animacion-espera").clone();
+    animacion_espera.toggleClass("hidden");
+    $("#seccion-comentarios").html(animacion_espera.html());
+
+    $.post({
+        url: '/comentario/nuevo/',
+        data: datos_formulario,
+        success: function(data) {
+            //TODO PONER COMENTARIO DE RESPUESTA MANUALMENTE AQUI
+        },
+        error: function () {
+            // obtenerSeccionComentarios(id_pub);
+            $("#seccion-comentarios").html("<p>Ocurrio un error grave tratando de buscar comentarios</p>");
+        }
+    });
+}

@@ -236,10 +236,12 @@ public class ManejoTemplates {
 
                 Publicacion p = PublicacionServicios.getInstancia().find(id);
                 List<Imagen> imagenes = ImagenServicios.getInstancia().findByPublicacionId(p.getId());
+                List<Comentario> comentarios = ComentarioServicios.getInstancia().findByPublicacionId(p.getId());
 
                 data.put("pub",p);
                 data.put("vendedor",p.getUsuario());
                 data.put("imagenes",imagenes);
+                data.put("comentarios",comentarios);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }

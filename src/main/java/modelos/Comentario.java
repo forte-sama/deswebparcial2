@@ -1,8 +1,10 @@
 package modelos;
 
+import servicios.ComentarioServicios;
+
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.List;
 
 /**
  * Created by Dell_2 on 6/29/2016.
@@ -14,8 +16,7 @@ public class Comentario {
     private Integer id;
     @Column(length = 500)
     private String cuerpo;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Usuario usuario;
+    private String usuario;
     @ManyToOne(fetch = FetchType.EAGER)
     private Publicacion publicacion;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -39,11 +40,11 @@ public class Comentario {
         this.cuerpo = cuerpo;
     }
 
-    public Usuario getUsuario() {
+    public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
@@ -61,5 +62,13 @@ public class Comentario {
 
     public void setPadre(Comentario padre) {
         this.padre = padre;
+    }
+
+    public boolean tieneRespuestas() {
+        return ComentarioServicios.getInstancia().findByPadre(this).size() > 0;
+    }
+
+    public List<Comentario> respuestas() {
+        return ComentarioServicios.getInstancia().findByPadre(this);
     }
 }

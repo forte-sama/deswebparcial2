@@ -161,10 +161,8 @@
                                 </div>
                             </div>
                             <#-- comentarios -->
-                            <div class="row">
-                                <div class="col col-lg-12">
-                                    <a class="btn btn-block btn-warning">div 5</a>
-                                </div>
+                            <div id="seccion-comentarios" class="row" pub="${pub.getId()?string["0"]}">
+                                <#include "comentarios.ftl">
                             </div>
                         </section>
                     </div>
@@ -173,10 +171,40 @@
         </div>
     </div>
 </div>
-
 <div id="galeria-modal" class="modal fade" tabindex="-1" role="dialog"">
     <img id="imagen-modal" src="/img/img_prueba1.jpg" alt="Imagen Full Size"/>
 </div>
-<script type="text/javascript" src="/js/publicacion_galeria.js"></script>
+<div id="form-respuesta-modal" class="modal fade" tabindex="-1" role="dialog"">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Respuesta a comentario de <span id="titulo-form-respuesta"></span></h4>
+            </div>
+            <div class="modal-body">
+                <form id="form-respuesta-comentario" class="form" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="juan nieve">
+                    </div>
+                    <div class="form-group">
+                        <input id="input-padre-id" type="hidden" name="padre" value="">
+                        <label for="text-input" class="control-label">Nuevo Comentario: </label>
+                        <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito"></textarea>
+                        <br />
+                        <button id="btn-form-respuesta-comentario" type="submit" class="btn btn-primary">Comentar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="animacion-espera" class="hidden">
+    <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+            <i class="fa fa-refresh fa-spin fa-5x texto-centrado"></i>
+        </div>
+    </div>
+</div>
+<#--<script type="text/javascript" src="/js/publicacion_galeria.js"></script>-->
 </body>
 </html>
