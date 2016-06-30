@@ -14,7 +14,27 @@ public class ManejoFiltros {
             if(usuario!=null){
                 response.redirect("/");
             }
+        });
 
+        before("/admin/*",(request, response) -> {
+            Usuario usuario=request.session().attribute("usuario");
+            if(usuario == null ||usuario.getAdmin()!=true){
+                response.redirect("/");
+            }
+        });
+
+        before("/usuario/edicion/:valor",(request, response) -> {
+            Usuario usuario=request.session().attribute("usuario");
+            if(usuario == null){
+                response.redirect("/");
+            }
+        });
+
+        before("/usuario/registro/",(request, response) -> {
+            Usuario usuario=request.session().attribute("usuario");
+            if(usuario != null){
+                response.redirect("/");
+            }
         });
 
 
