@@ -11,7 +11,14 @@ import servicios.TipoServicios;
 import servicios.UsuarioServicios;
 import spark.Session;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.Collection;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -178,5 +185,39 @@ public class ManejoFormularios {
             return "OK";
         });
 
+        post("/upload", "multipart/form-data", (request, response) -> {
+
+            String location = "src/main/resources/public/img";
+            long maxFileSize = 5000000;
+            long maxRequestSize = 5000000;
+            int fileSizeThreshold = 1024;
+            MultipartConfigElement multipartConfigElement = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
+            request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+
+
+            Collection<Part> parts = request.raw().getParts();
+            for(Part part : parts) {
+                if(!part.getName().equals("upfile"))
+                    continue;
+                System.out.println("Name:");
+                System.out.println(part.getName());
+                System.out.println("Size: ");
+                System.out.println(part.getSize());
+                System.out.println("Filename:");
+                System.out.println(part.getSubmittedFileName());
+                String fName = part.getSubmittedFileName();
+                Path out = Paths.get("src/main/resources/public/img/"+fName);
+                try (final InputStream in = part.getInputStream()) {
+                    Files.copy(in, out);
+                    part.delete();
+
+                }
+            }
+
+            multipartConfigElement = null;
+            parts = null;
+
+            return "OK";
+        });
     }
 }
