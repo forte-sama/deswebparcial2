@@ -167,11 +167,11 @@
                                         <form id="form-nuevo-comentario" class="form" method="post">
                                             <div class="form-group">
                                                 <label for="nombre">Nombre:</label>
-                                                <input type="text" class="form-control" id="nombre" placeholder="juan nieve">
+                                                <input type="text" class="form-control" id="nombre" placeholder="juan nieve" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="text-input" class="control-label">Nuevo Comentario: </label>
-                                                <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito"></textarea>
+                                                <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito" required></textarea>
                                                 <br />
                                                 <button id="btn-form-nuevo-comentario" type="submit" class="btn btn-primary">
                                                     <i class="fa fa-paper-plane" aria-hidden="true"></i> Comentar
@@ -181,7 +181,7 @@
                                     </div>
                                 </div>
                                 <div id="seccion-comentarios" class="col col-lg-12" pub="${pub.getId()?string["0"]}">
-                                    <#include "comentarios.ftl">
+                                    <#include "publicacion_comentarios.ftl">
                                 </div>
                             </div>
                         </section>
@@ -204,12 +204,12 @@
                 <form id="form-respuesta-comentario" class="form" method="post">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="juan nieve">
+                        <input type="text" class="form-control" id="nombre" placeholder="juan nieve" required>
                     </div>
                     <div class="form-group">
                         <input id="input-padre-id" type="hidden" name="padre" value="">
                         <label for="text-input" class="control-label">Nuevo Comentario: </label>
-                        <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito"></textarea>
+                        <textarea style="resize:none" id="text-input" class="form-control" name="cuerpo" rows="3" placeholder="Me gusta ese carrito" required></textarea>
                         <br />
                         <button id="btn-form-respuesta-comentario" type="submit" class="btn btn-primary">Comentar</button>
                     </div>

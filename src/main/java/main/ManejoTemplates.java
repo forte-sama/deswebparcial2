@@ -26,6 +26,9 @@ public class ManejoTemplates {
             Usuario usuario_loguiado = req.session().attribute("usuario");
             if(usuario_loguiado != null)
                 data.put("usuario",usuario_loguiado);
+
+
+
             return new ModelAndView(data,"_basic.ftl");
         }, new FreeMarkerEngine(conf));
 

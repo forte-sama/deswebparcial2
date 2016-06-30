@@ -8,6 +8,10 @@ var modal_form_respuesta = $("#form-respuesta-modal");
 
 $(document).ready(function () {
 
+    $("a.list-group-item").click(function (e) {
+        e.preventDefault();
+    });
+
     $("#imagen-modal").click(function () {
         $("#galeria-modal").modal("hide");
     });
@@ -84,14 +88,19 @@ function postearComentario(datos_formulario) {
         url: '/comentario/nuevo/',
         data: datos_formulario,
         success: function(data) {
-            //para simular que se toma un tiempo
-            setTimeout(function () {
-                $("#seccion-comentarios").html(data);
-                updateBotones();
-            },1500);
+
+            if(data.length == 0){
+                $("#seccion-comentarios").html("<h4 class='text-danger'>Hubo un Error</h4>");
+            }
+            else {
+                //para simular que se toma un tiempo
+                setTimeout(function () {
+                    $("#seccion-comentarios").html(data);
+                    updateBotones();
+                }, 1500);
+            }
         },
         error: function () {
-            // obtenerSeccionComentarios(id_pub);
             $("#seccion-comentarios").html("<p>Ocurrio un error grave tratando de buscar comentarios</p>");
         }
     });

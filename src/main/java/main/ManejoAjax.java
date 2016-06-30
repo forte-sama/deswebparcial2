@@ -94,7 +94,7 @@ public class ManejoAjax {
                 e.printStackTrace();
             }
 
-            return new ModelAndView(data,"comentarios.ftl");
+            return new ModelAndView(data,"publicacion_comentarios.ftl");
         }, new FreeMarkerEngine(conf));
 
         post("/comentario/nuevo/", (req, res) -> {
@@ -103,6 +103,15 @@ public class ManejoAjax {
             String usuario = escapeHtml(req.queryParams("usuario"));
             String cuerpo = escapeHtml(req.queryParams("cuerpo"));
             String rawIdComentarioPadre = req.queryParams("comentario_padre");
+
+            boolean validoPubId   = !rawIdPublicacion.isEmpty() && rawIdPublicacion.length() > 0;
+            boolean validoUsuario = !usuario.isEmpty() && usuario.length() > 0;
+            boolean validoCuerpo  = !cuerpo.isEmpty() && cuerpo.length() > 0;
+
+            //retornar nada si algun campo esta vacio (esto corresponde a un uso ilegal)
+            if(!validoPubId || !validoUsuario || !validoCuerpo) {
+                return "";
+            }
 
             //construir nuevo comentario
             Comentario comentario = new Comentario();
@@ -141,7 +150,7 @@ public class ManejoAjax {
 
             //redireccionar a ruta que genera template de comentarios
             res.redirect("/comentarios/ver/" + rawIdPublicacion + "/");
-            //enviar mensaje de respuesta
+
             return "";
         });
     }

@@ -1,5 +1,9 @@
 <#if comentarios?? && comentarios?size == 0>
-<p>No hay comentarios</p>
+<div class="row">
+    <div class="col col-lg-12">
+        <h4 class="text-primary">No hay comentarios</h4>
+    </div>
+</div>
 <#else>
 <#list comentarios as comentario>
 <div class="panel panel-default">
@@ -30,12 +34,14 @@
                 <div id="respuestas-comentario${comentario.getId()}" class="collapse">
                     <hr />
                     <p><i class="fa fa-comments fa-lg" aria-hidden="true"></i> Respuestas:</p>
-                    <#list comentario.respuestas() as respuesta>
-                        <div class="alert alert-info">
-                            <b>${respuesta.getUsuario()}: </b>
-                            <p>${respuesta.getCuerpo()}</p>
-                        </div>
-                    </#list>
+                    <div class="list-group">
+                        <#list comentario.respuestas() as respuesta>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">${respuesta.getUsuario()}:</h4>
+                            <p class="list-group-item-text">${respuesta.getCuerpo()}</p>
+                        </a>
+                        </#list>
+                    </div>
                 </div>
             </div>
             </#if>
