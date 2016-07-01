@@ -1,17 +1,21 @@
 package main;
 
 import freemarker.template.Configuration;
-import modelos.Marca;
-import modelos.PrecioPublicacion;
-import modelos.Tipo;
-import modelos.Usuario;
-import servicios.MarcaServicios;
-import servicios.PrecioPublicacionServicios;
-import servicios.TipoServicios;
-import servicios.UsuarioServicios;
+import modelos.*;
+import org.apache.commons.io.FilenameUtils;
+import servicios.*;
 import spark.Session;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -178,5 +182,121 @@ public class ManejoFormularios {
             return "OK";
         });
 
+        post("/publicar/", "multipart/form-data", (request, response) -> {
+
+
+            String location = "src/main/resources/public/img";
+            long maxFileSize = 5000000;
+            long maxRequestSize = 5000000;
+            int fileSizeThreshold = 1024;
+            MultipartConfigElement multipartConfigElement = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
+            request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+            if(!Validation.getInstancia().validarPublicacion(request,true))
+                return "Formulario invalido";
+            Collection<Part> parts = request.raw().getParts();
+            for(Part part : parts) {
+                if(!part.getName().equals("upfile"))
+                    continue;
+
+                String extension = tipoArchivo(part.getSubmittedFileName());
+                if(!extension.toLowerCase().equals("png") && !extension.toLowerCase().equals("jpg") && !extension.toLowerCase().equals("gif"))
+                    return "Formato de imagen no soportado.";
+
+            }
+            Publicacion publicacion = new Publicacion();
+            publicacion.setFechaInicio(new Date());
+            publicacion.setFechaFin(sumarDias(publicacion.getFechaInicio(),Integer.parseInt(request.queryParams("dias"))));
+            publicacion.setUsuario(UsuarioServicios.getInstancia().find(request.queryParams("usuario")));
+            publicacion.setAnio(Integer.parseInt(request.queryParams("anio")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("pasajeros")));
+            publicacion.setUso(Integer.parseInt(request.queryParams("uso")));
+            publicacion.setCilindros(Integer.parseInt(request.queryParams("cilindros")));
+            publicacion.setCombustible(request.queryParams("combustible"));
+            publicacion.setMarca(MarcaServicios.getInstancia().find(Integer.parseInt(request.queryParams("marca"))));
+            publicacion.setModelo(request.queryParams("modelo"));
+            publicacion.setObservaciones(request.queryParams("observaciones"));
+            publicacion.setTransmision(request.queryParams("transmision"));
+            publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));
+            publicacion.setTipo(TipoServicios.getInstancia().find(Integer.parseInt(request.queryParams("tipo"))));
+            publicacion.setPrecioPublicacion(PrecioPublicacionServicios.getInstancia().precioActual().getPrecio()*Integer.parseInt(request.queryParams("dias")));
+            PublicacionServicios.getInstancia().create(publicacion);
+
+
+            int i = 0;
+            for(Part part : parts) {
+
+                if(!part.getName().equals("upfile"))
+                    continue;
+                System.out.println("Name:");
+                System.out.println(part.getName());
+                System.out.println("Size: ");
+                System.out.println(part.getSize());
+                System.out.println("Filename:");
+                System.out.println(part.getSubmittedFileName());
+                String extension = tipoArchivo(part.getSubmittedFileName());
+
+
+
+                String ruta = "src/main/resources/public/img/"+publicacion.getId()+"_" + i + "." + extension;
+                Path out = Paths.get(ruta);
+                try (final InputStream in = part.getInputStream()) {
+                    Files.copy(in, out);
+                    System.out.print(part.getSubmittedFileName());
+
+                    String rutaDB = "/img/"+publicacion.getId()+"_" + i + "." + extension;
+                    Imagen imagen = new Imagen();
+                    imagen.setPublicacion(publicacion);
+                    imagen.setRuta(rutaDB);
+                    ImagenServicios.getInstancia().create(imagen);
+                    i++;
+                    part.delete();
+
+                }
+            }
+
+            multipartConfigElement = null;
+            parts = null;
+
+            return "OK";
+        });
+
+        post("/publicacion/editar/", (request, response) -> {
+            if(!Validation.getInstancia().validarEdicionPublicacion(request,true))
+                return "Formulario invalido. Por favor no invente.";
+
+            Publicacion publicacion = PublicacionServicios.getInstancia().find(Integer.parseInt(request.queryParams("publicacion")));
+
+
+            publicacion.setAnio(Integer.parseInt(request.queryParams("anio")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("pasajeros")));
+            publicacion.setUso(Integer.parseInt(request.queryParams("uso")));
+            publicacion.setCilindros(Integer.parseInt(request.queryParams("cilindros")));
+            publicacion.setCombustible(request.queryParams("combustible"));
+            publicacion.setMarca(MarcaServicios.getInstancia().find(Integer.parseInt(request.queryParams("marca"))));
+            publicacion.setModelo(request.queryParams("modelo"));
+            publicacion.setObservaciones(request.queryParams("observaciones"));
+            publicacion.setTransmision(request.queryParams("transmision"));
+            publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));
+            publicacion.setTipo(TipoServicios.getInstancia().find(Integer.parseInt(request.queryParams("tipo"))));
+
+            PublicacionServicios.getInstancia().edit(publicacion);
+            response.redirect("/");
+            return "OK";
+        });
     }
+
+
+
+     public static Date sumarDias(Date date, int days)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, days);
+            return cal.getTime();
+        }
+    public static String tipoArchivo(String file){
+        String ext = FilenameUtils.getExtension(file);
+        return ext;
+    }
+
 }

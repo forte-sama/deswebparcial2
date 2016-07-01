@@ -253,6 +253,37 @@ public class ManejoTemplates {
 
             return new ModelAndView(data,"publicacion_detalle.ftl");
         }, new FreeMarkerEngine(conf));
+
+        get("/publicacion/crear", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+            List<Marca> marcas = MarcaServicios.getInstancia().findAll();
+            List<Tipo> tipos = TipoServicios.getInstancia().findAll();
+            Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
+            data.put("marcas",marcas);
+            data.put("usuario",usuario);
+            data.put("tipos",tipos);
+            return new ModelAndView(data,"publicacion_crear.ftl");
+        }, new FreeMarkerEngine(conf));
+
+        get("/publicacion/editar/:publicacion", (req, res) -> {
+            String p = req.params("publicacion");
+            if(!Validation.getInstancia().publicacionExiste(p)){
+                res.redirect("/");
+                return null;
+            }
+            HashMap<String,Object> data = new HashMap<>();
+            List<Marca> marcas = MarcaServicios.getInstancia().findAll();
+            List<Tipo> tipos = TipoServicios.getInstancia().findAll();
+            Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
+            Publicacion publicacion = PublicacionServicios.getInstancia().find(Integer.parseInt(p));
+            System.out.print(publicacion);
+            data.put("marcas",marcas);
+            data.put("usuario",usuario);
+            data.put("tipos",tipos);
+            data.put("publicacion",publicacion);
+
+            return new ModelAndView(data,"publicacion_editar.ftl");
+        }, new FreeMarkerEngine(conf));
     }
 
     private static HashMap<String,List<String>> obtenerOpcionesFiltros() {
