@@ -54,7 +54,7 @@
                     <p class="list-group-item-text">
                     <div class="row">
                         <div class="col col-lg-6">
-                            <label for="precio_desde_form">Hasta</label>
+                            <label for="precio_desde_form">Desde</label>
                             <select class="form-control" name="precio_desde" id="precio_desde_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["precios"] as precios>
@@ -100,10 +100,40 @@
         </form>
     </div>
     <div class="col col-lg-8">
-        <a class="btn btn-primary btn-block">
-            <#list publicaciones as pub>
-            <p>${pub.getModelo()}</p>
+        <div class="col col-lg-12">
+            <#if datos_publicaciones["hay_pagina_anterior"] == true>
+            <div class="col col-lg-3 pull-left">
+                <a class="btn btn-default btn-block" href="${datos_publicaciones["url_anterior"]}">Anterior</a>
+            </div>
+            </#if>
+            <#if datos_publicaciones["hay_pagina_siguiente"] == true>
+            <div class="col col-lg-3 pull-right">
+                <a class="btn btn-default btn-block" href="${datos_publicaciones["url_siguiente"]}">Siguiente</a>
+            </div>
+            </#if>
+        </div>
+        <div class="row">
+            <hr />
+            <#list 0..datos_publicaciones["publicaciones"]?size-1 as i>
+            <div class="col col-lg-4">
+                <div class="thumbnail">
+                    <#-- obtener primera imagen -->
+                    <img class="imagen-item-publicacion" src="${datos_publicaciones["rutas_imagenes_publicaciones"][i]}" alt="..." height="250">
+                    <div class="caption row">
+                        <div class="col col-lg-12">
+                            <p>${datos_publicaciones["publicaciones"][i].getModelo()} <i>${datos_publicaciones["publicaciones"][i].getAnio()?string["0"]}</i></p>
+                            <p><b>RD$ ${datos_publicaciones["publicaciones"][i].getPrecioVehiculo()}</b></p>
+                        </div>
+                        <div class="col col-lg-6">
+                            <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">Ver</a>
+                        </div>
+                        <div class="col col-lg-6">
+                            <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Vender</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </#list>
-        </a>
+        </div>
     </div>
 </div>

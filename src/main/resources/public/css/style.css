@@ -20,7 +20,7 @@
     overflow: scroll;
 }
 
-.imagen-publicacion {
+.imagen-publicacion, .imagen-item-publicacion {
     width: 100%;
     height: 300px;
     max-height: 150px;
