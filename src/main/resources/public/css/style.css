@@ -38,6 +38,28 @@ img#imagen-modal {
     margin: 0 auto;
 }
 
+#seccion-comentarios {
+    max-height: 450px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar
+{
+    width: 12px;  /* for vertical scrollbars */
+    height: 12px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb
+{
+    background: rgba(0, 0, 0, 0.5);
+}
+
 
 .fileUpload {
     position: relative;

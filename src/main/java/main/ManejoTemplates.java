@@ -4,10 +4,10 @@ import freemarker.template.Configuration;
 import modelos.*;
 import servicios.*;
 import spark.ModelAndView;
+import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static spark.Spark.get;
 
@@ -26,7 +26,12 @@ public class ManejoTemplates {
             Usuario usuario_loguiado = req.session().attribute("usuario");
             if(usuario_loguiado != null)
                 data.put("usuario",usuario_loguiado);
-            return new ModelAndView(data,"_basic.ftl");
+
+            //obtener las publicaciones que cumplan con los filtros
+            data.put("publicaciones",filtrarPublicaciones(req));
+            data.put("opciones",obtenerOpcionesFiltros());
+
+            return new ModelAndView(data,"publicacion_lista.ftl");
         }, new FreeMarkerEngine(conf));
 
         get("/admin/user/ver/", (req, res) -> {
@@ -236,10 +241,12 @@ public class ManejoTemplates {
 
                 Publicacion p = PublicacionServicios.getInstancia().find(id);
                 List<Imagen> imagenes = ImagenServicios.getInstancia().findByPublicacionId(p.getId());
+                List<Comentario> comentarios = ComentarioServicios.getInstancia().findByPublicacionId(p.getId());
 
                 data.put("pub",p);
                 data.put("vendedor",p.getUsuario());
                 data.put("imagenes",imagenes);
+                data.put("comentarios",comentarios);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -277,5 +284,51 @@ public class ManejoTemplates {
 
             return new ModelAndView(data,"publicacion_editar.ftl");
         }, new FreeMarkerEngine(conf));
+    }
+
+    private static HashMap<String,List<String>> obtenerOpcionesFiltros() {
+        HashMap<String,List<String>> opciones = new HashMap<>();
+
+        //anios
+        opciones.put("anios",new ArrayList<>());
+        for(int i = Calendar.getInstance().get(Calendar.YEAR) + 1; i >= 1890; i--) {
+            opciones.get("anios").add(i + "");
+        }
+        //precios
+        opciones.put("precios",new ArrayList<>());
+        for(int i = 5000000; i >= 0; i -= 50000) {
+            opciones.get("precios").add(i + "");
+        }
+        //marcas
+        opciones.put("marcas",new ArrayList<>());
+        for(Marca marca : MarcaServicios.getInstancia().findAll()) {
+            opciones.get("marcas").add(marca.getNombre());
+        }
+        //tipos
+        opciones.put("tipos",new ArrayList<>());
+        for(Tipo tipo : TipoServicios.getInstancia().findAll()) {
+            opciones.get("tipos").add(tipo.getNombre());
+        }
+
+        return opciones;
+    }
+
+    private static List<Publicacion> filtrarPublicaciones(Request req) {
+        //obtener criterios aunque tengan valor default (default no filtra nada)
+        Set<String> rawCriterios = req.queryParams();
+        //lista de criterios curados (solo los que no estan en default)
+        HashMap<String,String> criteriosUsados = new HashMap<>();
+
+        for(String criterio : rawCriterios) {
+            String valorCriterio = req.queryParams(criterio);
+            //agregar si el valor del criterio actual no esta por default
+            if(!valorCriterio.toLowerCase().contentEquals("default")) {
+                criteriosUsados.put(criterio,valorCriterio);
+            }
+        }
+
+        List<Publicacion> resp = PublicacionServicios.getInstancia().findBy(criteriosUsados);
+
+        return resp;
     }
 }

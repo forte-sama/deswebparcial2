@@ -19,9 +19,9 @@ public class Publicacion implements Serializable {
     private Double precioVehiculo;
     private Date fechaInicio;
     private Date fechaFin;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Tipo tipo;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Marca marca;
     private String modelo;
     private Integer anio;
