@@ -19,12 +19,12 @@
 
                 </div>
                 <div class="panel-body">
-                    <form <#if editando>action="/usuario/edicion/"<#else>action="/usuario/registro/" </#if> method="POST" class="form-signin">
+                    <form <#if editando>action="/usuario/edicion/"<#else>action="/usuario/registro/" </#if> method="POST" class="form-signin" id="formulario-usuario">
                         <br>
                         <#if editando> <input type="hidden" name="username" value="${usuario.username}"></#if>
                         <#if !editando>
                             <label for="inputEmail">Nombre de Usuario</label>
-                            <input name="username" type="text" id="username" class="form-control" placeholder="Digite su usuario..." required="" autofocus="">
+                            <input name="username" type="text" id="username" class="form-control" placeholder="Digite su usuario..." minlength="2" required="" autofocus="">
                             <br>
 
                             <label for="password">Contraseña</label>
@@ -46,7 +46,7 @@
                         <br>
 
                         <label for="email">Correo Electrónico</label>
-                        <input <#if editando>value="${usuario.email}" </#if> name="email" type="text" id="email" class="form-control" placeholder="Digite su correo..."  required="" autofocus="">
+                        <input <#if editando>value="${usuario.email}" </#if> name="email" type="email" id="email" class="form-control" placeholder="Digite su correo..."  required="" autofocus="">
                         <br>
 
                         <label for="direccion">Dirección:</label>
@@ -63,4 +63,18 @@
     </div>
 </div>
 </body>
+<script>
+
+    $("#formulario-usuario").validate({
+        errorClass: "my-error-class"
+
+    });
+
+    jQuery.extend(jQuery.validator.messages, {
+        required: "Por favor llene este campo.",
+
+        email: "Este correo es inválido.",
+
+    });
+</script>
 </html>
