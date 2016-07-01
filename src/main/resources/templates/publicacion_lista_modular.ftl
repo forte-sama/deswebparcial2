@@ -54,7 +54,7 @@
                     <p class="list-group-item-text">
                     <div class="row">
                         <div class="col col-lg-6">
-                            <label for="precio_desde_form">Hasta</label>
+                            <label for="precio_desde_form">Desde</label>
                             <select class="form-control" name="precio_desde" id="precio_desde_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["precios"] as precios>
@@ -101,9 +101,15 @@
     </div>
     <div class="col col-lg-8">
         <a class="btn btn-primary btn-block">
-            <#list publicaciones as pub>
+            <#list datos_publicaciones["publicaciones"] as pub>
             <p>${pub.getModelo()}</p>
             </#list>
+            <#if datos_publicaciones["hay_pagina_anterior"] == true>
+            <p>si hay anterior</p>
+            </#if>
+            <#if datos_publicaciones["hay_pagina_siguiente"] == true>
+            <p>si hay siguiente</p>
+            </#if>
         </a>
     </div>
 </div>

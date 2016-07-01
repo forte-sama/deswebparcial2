@@ -7,7 +7,6 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 import static spark.Spark.get;
@@ -26,10 +25,10 @@ public class ManejoTemplates {
             HashMap<String,Object> data = new HashMap<>();
             Usuario usuario_loguiado = req.session().attribute("usuario");
             if(usuario_loguiado != null)
-                data.put("usuario",usuario_loguiado);
+                data.put("usuario_sesion",usuario_loguiado);
 
             //obtener las publicaciones que cumplan con los filtros
-            data.put("publicaciones",filtrarPublicaciones(req));
+            data.put("datos_publicaciones", datosPublicaciones(req));
             data.put("opciones",obtenerOpcionesFiltros());
 
             return new ModelAndView(data,"publicacion_lista.ftl");
@@ -37,7 +36,9 @@ public class ManejoTemplates {
 
         get("/admin/user/ver/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
-
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             //obtener lista total de usuarios
             List<Usuario> usuarios_lista = UsuarioServicios.getInstancia().findAll();
             data.put("usuarios",usuarios_lista);
@@ -49,6 +50,7 @@ public class ManejoTemplates {
         }, new FreeMarkerEngine(conf));
 
         get("/admin/user/autorizar/:username", (req, res) -> {
+
             //obtener parametros
             String username = req.params("username");
             //buscar objeto usuario deseado
@@ -88,7 +90,9 @@ public class ManejoTemplates {
 
         get("/admin/precio_publicacion/editar/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
-
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             //obtener precio actual
             PrecioPublicacion ultimo = PrecioPublicacionServicios.getInstancia().precioActual();
 
@@ -98,7 +102,9 @@ public class ManejoTemplates {
 
         get("/admin/:tipo_target/crear/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
-
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             String tipo_target = req.params("tipo_target");
 
             //setear datos del template
@@ -120,7 +126,9 @@ public class ManejoTemplates {
 
         get("/admin/:tipo_target/editar/:target_id", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
-
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             String tipo_target = req.params("tipo_target");
 
             boolean fallo = false;
@@ -219,6 +227,7 @@ public class ManejoTemplates {
 
         get("/usuario/edicion/:username", (req, res) -> {
             String username = req.params("username");
+
             if(!Validation.getInstancia().usuarioExiste(username)){
                 res.redirect("/");
                 return null;
@@ -226,6 +235,9 @@ public class ManejoTemplates {
 
             Usuario usuario = UsuarioServicios.getInstancia().find(username);
             HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             data.put("editando",true);
             data.put("usuario",usuario);
             return new ModelAndView(data, "usuario_registro.ftl");
@@ -234,7 +246,9 @@ public class ManejoTemplates {
 
         get("/publicacion/ver/:pub_id/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
-
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             String rawId = req.params("pub_id");
 
             try {
@@ -257,6 +271,9 @@ public class ManejoTemplates {
 
         get("/publicacion/crear/", (req, res) -> {
             HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             List<Marca> marcas = MarcaServicios.getInstancia().findAll();
             List<Tipo> tipos = TipoServicios.getInstancia().findAll();
             Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
@@ -273,6 +290,9 @@ public class ManejoTemplates {
                 return null;
             }
             HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             List<Marca> marcas = MarcaServicios.getInstancia().findAll();
             List<Tipo> tipos = TipoServicios.getInstancia().findAll();
             Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
@@ -292,12 +312,28 @@ public class ManejoTemplates {
                 res.redirect("/");
             Publicacion publicacion = PublicacionServicios.getInstancia().find(Integer.parseInt(p));
             HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
             data.put("publicacion",publicacion);
             data.put("dias",req.params("dias"));
             data.put("tarifa",PrecioPublicacionServicios.getInstancia().precioActual());
             return new ModelAndView(data, "publicacion_factura.ftl");
 
         },new FreeMarkerEngine(conf));
+
+        get("/publicacion/vender/:publicacion/", (req, res) -> {
+            String p = req.params("publicacion");
+            if(!Validation.getInstancia().publicacionExiste(p)){
+                res.redirect("/");
+                return null;
+            }
+
+            Publicacion publicacion =  PublicacionServicios.getInstancia().find(Integer.parseInt(p));
+            publicacion.setVendido(true);
+            PublicacionServicios.getInstancia().edit(publicacion);
+            return  "OK";
+        });
     }
 
     private static HashMap<String,List<String>> obtenerOpcionesFiltros() {
@@ -327,24 +363,37 @@ public class ManejoTemplates {
         return opciones;
     }
 
-    private static List<Publicacion> filtrarPublicaciones(Request req) {
+    private static HashMap<String,Object> datosPublicaciones(Request req) {
         //obtener criterios aunque tengan valor default (default no filtra nada)
         Set<String> rawCriterios = req.queryParams();
         //lista de criterios curados (solo los que no estan en default)
         HashMap<String,String> criteriosUsados = new HashMap<>();
-
+        //filtrar criterios que tienen valor por defecto
         for(String criterio : rawCriterios) {
-            String valorCriterio = req.queryParams(criterio);
-            //agregar si el valor del criterio actual no esta por default
-            if(!valorCriterio.toLowerCase().contentEquals("default")) {
+            String valorCriterio = req.queryParams(criterio).toLowerCase();
+            //agregar si el valor del criterio actual no esta por default y no es el numero de pagina
+            if(criterio.contentEquals("page_num")) {
+                continue;
+            }
+
+            if(!valorCriterio.contentEquals("default")) {
                 criteriosUsados.put(criterio,valorCriterio);
             }
         }
+        //obtener numero de pagina
+        String rawNumPagina = req.queryParams("page_num");
+        int numPagina;
+        //valor numerico de la pagina
+        try {
+            //para evitar tomar numero de pagina como negativo
+            numPagina = Math.max(1,Integer.parseInt(rawNumPagina));
+        } catch (NumberFormatException e) {
+            numPagina = 1;
+        } catch (NullPointerException e) {
+            numPagina = 1;
+        }
 
-        List<Publicacion> resp = PublicacionServicios.getInstancia().findBy(criteriosUsados);
-
-        return resp;
+        //retornar publicaciones filtradas y paginacion si es posible
+        return PublicacionServicios.getInstancia().filtrarPublicaciones(criteriosUsados,numPagina);
     }
-
-
 }

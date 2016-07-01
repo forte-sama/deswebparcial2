@@ -273,6 +273,7 @@ public class ManejoFormularios {
             publicacion.setTransmision(request.queryParams("transmision"));
             publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));
             publicacion.setTipo(TipoServicios.getInstancia().find(Integer.parseInt(request.queryParams("tipo"))));
+            publicacion.setVendido(false);
 
             PublicacionServicios.getInstancia().edit(publicacion);
             response.redirect("/");
