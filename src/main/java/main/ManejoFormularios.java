@@ -6,16 +6,14 @@ import org.apache.commons.io.FilenameUtils;
 import servicios.*;
 import spark.Session;
 
+
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -25,9 +23,6 @@ import static spark.debug.DebugScreen.enableDebugScreen;
  */
 public class ManejoFormularios {
     public static void manejarFormularios() {
-
-        //TODO borrar cuando acabe el desarrollo
-        get("/fail", (request, response) -> "fail");
 
         //manejo de llamadas POST
         //manejo formulario edicion de precio de publicaciones
@@ -256,7 +251,7 @@ public class ManejoFormularios {
 
             multipartConfigElement = null;
             parts = null;
-
+            response.redirect("/factura/" + publicacion.getId() + "/" + request.queryParams("dias") + "/");
             return "OK";
         });
 

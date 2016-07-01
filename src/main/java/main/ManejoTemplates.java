@@ -7,6 +7,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 import static spark.Spark.get;
@@ -284,6 +285,19 @@ public class ManejoTemplates {
 
             return new ModelAndView(data,"publicacion_editar.ftl");
         }, new FreeMarkerEngine(conf));
+
+        get("/factura/:publicacion/:dias/", (req, res) -> {
+            String p = req.params("publicacion");
+            if(!Validation.getInstancia().publicacionExiste(p))
+                res.redirect("/");
+            Publicacion publicacion = PublicacionServicios.getInstancia().find(Integer.parseInt(p));
+            HashMap<String,Object> data = new HashMap<>();
+            data.put("publicacion",publicacion);
+            data.put("dias",req.params("dias"));
+            data.put("tarifa",PrecioPublicacionServicios.getInstancia().precioActual());
+            return new ModelAndView(data, "publicacion_factura.ftl");
+
+        },new FreeMarkerEngine(conf));
     }
 
     private static HashMap<String,List<String>> obtenerOpcionesFiltros() {
@@ -331,4 +345,6 @@ public class ManejoTemplates {
 
         return resp;
     }
+
+
 }
