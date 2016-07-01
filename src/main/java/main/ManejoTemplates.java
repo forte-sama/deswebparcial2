@@ -265,10 +265,8 @@ public class ManejoTemplates {
         }
         //precios
         opciones.put("precios",new ArrayList<>());
-        for(int i = 5000000; i >= 0;) {
+        for(int i = 5000000; i >= 0; i -= 50000) {
             opciones.get("precios").add(i + "");
-
-            i -= 50000;
         }
         //marcas
         opciones.put("marcas",new ArrayList<>());
@@ -298,10 +296,8 @@ public class ManejoTemplates {
             }
         }
 
-        for(String llave : criteriosUsados.keySet()) {
-            System.out.println(llave + " : " + criteriosUsados.get(llave));
-        }
+        List<Publicacion> resp = PublicacionServicios.getInstancia().findBy(criteriosUsados);
 
-        return new ArrayList<>();
+        return resp;
     }
 }

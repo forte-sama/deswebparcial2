@@ -29,7 +29,8 @@
                     <p class="list-group-item-text">
                     <div class="row">
                         <div class="col col-lg-6">
-                            <select class="form-control" name="anio_desde">
+                            <label for="anio_desde_form">Desde</label>
+                            <select class="form-control" name="anio_desde" id="anio_desde_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["anios"] as anio>
                                 <option value="${anio}">${anio}</option>
@@ -37,7 +38,8 @@
                             </select>
                         </div>
                         <div class="col col-lg-6">
-                            <select class="form-control" name="anio_hasta">
+                            <label for="anio_hasta_form">Hasta</label>
+                            <select class="form-control" name="anio_hasta" id="anio_hasta_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["anios"] as anio>
                                 <option value="${anio}">${anio}</option>
@@ -52,7 +54,8 @@
                     <p class="list-group-item-text">
                     <div class="row">
                         <div class="col col-lg-6">
-                            <select class="form-control" name="precio_desde">
+                            <label for="precio_desde_form">Hasta</label>
+                            <select class="form-control" name="precio_desde" id="precio_desde_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["precios"] as precios>
                                 <option value="${precios}">${precios}</option>
@@ -60,7 +63,8 @@
                             </select>
                         </div>
                         <div class="col col-lg-6">
-                            <select class="form-control" name="precio_hasta">
+                            <label for="precio_hasta_form">Hasta</label>
+                            <select class="form-control" name="precio_hasta" id="precio_hasta_form">
                                 <option value="default" selected>---</option>
                             <#list opciones["precios"] as precio>
                                 <option value="${precio}">${precio}</option>
@@ -86,9 +90,9 @@
                     <p class="list-group-item-text">
                         <select class="form-control" name="tipo">
                             <option value="default" selected>---</option>
-                        <#list opciones["tipos"] as tipo>
+                            <#list opciones["tipos"] as tipo>
                             <option value="${tipo}">${tipo}</option>
-                        </#list>
+                            </#list>
                         </select>
                     </p>
                 </a>
@@ -96,6 +100,10 @@
         </form>
     </div>
     <div class="col col-lg-8">
-        <a class="btn btn-primary btn-block">Klk klk klk</a>
+        <a class="btn btn-primary btn-block">
+            <#list publicaciones as pub>
+            <p>${pub.getModelo()}</p>
+            </#list>
+        </a>
     </div>
 </div>
