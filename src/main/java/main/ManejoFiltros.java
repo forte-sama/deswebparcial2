@@ -55,6 +55,14 @@ public class ManejoFiltros {
             }
         });
 
+        before("/publicacion/vender/:publicacion/",(request, response) -> {
+            Usuario usuario=request.session().attribute("usuario");
+            Publicacion publicacion= PublicacionServicios.getInstancia().find(Integer.parseInt(request.params("publicacion")));
+            if(usuario == null||usuario.getAutorizado()==false|| !usuario.getUsername().equals(publicacion.getUsuario().getUsername())){
+                response.redirect("/");
+            }
+        });
+
 
 
 

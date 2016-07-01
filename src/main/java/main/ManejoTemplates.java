@@ -276,9 +276,8 @@ public class ManejoTemplates {
                 data.put("usuario_sesion",usuario_loguiado);
             List<Marca> marcas = MarcaServicios.getInstancia().findAll();
             List<Tipo> tipos = TipoServicios.getInstancia().findAll();
-            Usuario usuario = UsuarioServicios.getInstancia().find("papazon");
             data.put("marcas",marcas);
-            data.put("usuario",usuario);
+            data.put("usuario",usuario_loguiado);
             data.put("tipos",tipos);
             return new ModelAndView(data,"publicacion_crear.ftl");
         }, new FreeMarkerEngine(conf));
