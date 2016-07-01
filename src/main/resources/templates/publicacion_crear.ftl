@@ -13,7 +13,7 @@
                     <h3>Nueva Publicación</h3>
                 </div>
                 <div class="panel-body">
-                    <form action="/publicar/" method="POST" enctype="multipart/form-data" class="form-signin">
+                    <form action="/publicar/" method="POST" enctype="multipart/form-data" class="form-signin" id="formulario-publicacion">
                         <br>
                         <input name="usuario" type="hidden" value="${usuario.username}">
                         <div class="row">
@@ -26,10 +26,10 @@
                                 </select>
                                 <br>
                                 <label for="anio">Año</label>
-                                <input  name="anio" type="text" id="anio" class="form-control" placeholder="Digite el año..."  required="" autofocus="">
+                                <input  name="anio" type="number" id="anio" class="form-control" placeholder="Digite el año..."  required="" autofocus="">
                                 <br>
                                 <label for="pasajeros">Cantidad de pasajeros</label>
-                                <input  name="pasajeros" type="text" id="pasajeros" class="form-control" placeholder="Digite los pasajeros..."  required="" autofocus="">
+                                <input  name="pasajeros" type="number" id="pasajeros" class="form-control" placeholder="Digite los pasajeros..."  required="" autofocus="">
                                 <br>
                                 <label for="combustible">Tipo de Combustible</label>
                                 <select class="form-control"   name="combustible"  id="combustible">
@@ -48,8 +48,9 @@
                                 <label for="precio">Precio</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">RD$</span>
-                                    <input  name="precio" type="text" id="precio" class="form-control"   required="" autofocus="">
+                                    <input  name="precio" type="number" id="precio" class="form-control"   required="" autofocus="">
                                 </div>
+                                <br>
                                 <label for="tipo">Tipo</label>
                                 <br>
                                 <select class="form-control"   name="tipo"  id="tipo">
@@ -66,12 +67,13 @@
                                 <label for="uso">Uso (KM)</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">KM</span>
-                                    <input  name="uso" type="text" id="uso" class="form-control" placeholder="Digite el kilometraje..."  required="" autofocus="">
+                                    <input  name="uso" type="number" id="uso" class="form-control" placeholder="Digite el kilometraje..."  required="" autofocus="">
                                 </div>
                                 <br>
                                 <label for="cilindros">Cantidad de cilindros</label>
-                                <input  name="cilindros" type="text" id="cilindros" class="form-control" placeholder="Digite los cilindros..."  required="" autofocus="">
+                                <input  name="cilindros" type="number" id="cilindros" class="form-control" placeholder="Digite los cilindros..."  required="" autofocus="">
                                 <br>
+
                                 <label for="transmision">Tipo de Transmisión</label>
                                 <select class="form-control"   name="transmision"  id="transmision">
                                     <option value="Automática">Automática</option>
@@ -83,7 +85,7 @@
                                 <label for="observaciones">Duración de publicación</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">Días</span>
-                                    <input  name="dias" type="text" id="dias" class="form-control"   required="" autofocus="">
+                                    <input  name="dias" type="number" id="dias" class="form-control"   required="" autofocus="">
                                 </div>
                             </div>
                         </div>
