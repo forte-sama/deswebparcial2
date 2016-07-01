@@ -133,26 +133,32 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 query.setParameter("combustible",criterios.get("combustible"));
                 query_conteo.setParameter("combustible",criterios.get("combustible"));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("anio_desde")) {
                 query.setParameter("anio_desde",Integer.parseInt(criterios.get("anio_desde")));
                 query_conteo.setParameter("anio_desde",Integer.parseInt(criterios.get("anio_desde")));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("anio_hasta")) {
                 query.setParameter("anio_hasta",Integer.parseInt(criterios.get("anio_hasta")));
                 query_conteo.setParameter("anio_hasta",Integer.parseInt(criterios.get("anio_hasta")));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("precio_desde")) {
                 query.setParameter("precio_desde",Double.parseDouble(criterios.get("precio_desde")));
                 query_conteo.setParameter("precio_desde",Double.parseDouble(criterios.get("precio_desde")));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("precio_hasta")) {
                 query.setParameter("precio_hasta",Double.parseDouble(criterios.get("precio_hasta")));
                 query_conteo.setParameter("precio_hasta",Double.parseDouble(criterios.get("precio_hasta")));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("marca")) {
                 query.setParameter("marca",criterios.get("marca"));
                 query_conteo.setParameter("marca",criterios.get("marca"));
             }
+            //concatenar criterio e indicar que ya se ha concatenado
             if(criterios.containsKey("tipo")) {
                 query.setParameter("tipo",criterios.get("tipo"));
                 query_conteo.setParameter("tipo",criterios.get("tipo"));
