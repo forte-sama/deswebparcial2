@@ -27,7 +27,8 @@ public class ManejoFiltros {
 
         before("/usuario/edicion/:valor",(request, response) -> {
             Usuario usuario=request.session().attribute("usuario");
-            if(usuario == null){
+
+            if(usuario == null||!usuario.getUsername().equals(request.params("valor"))){
                 response.redirect("/");
             }
         });
@@ -57,11 +58,5 @@ public class ManejoFiltros {
 
 
 
-
-
     }
-
-
-
-
 }
