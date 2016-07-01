@@ -27,3 +27,14 @@ function readURL(input,number) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+$("#formulario-publicacion").validate({
+    errorClass: "my-error-class"
+
+});
+
+jQuery.extend(jQuery.validator.messages, {
+    required: "Por favor llene este campo.",
+    number: "Digite un número válido",
+
+});

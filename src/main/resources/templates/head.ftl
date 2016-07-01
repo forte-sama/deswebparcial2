@@ -8,4 +8,5 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>

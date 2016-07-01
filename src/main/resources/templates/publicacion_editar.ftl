@@ -13,7 +13,7 @@
                     <h3>Editar Publicación</h3>
                 </div>
                 <div class="panel-body">
-                    <form action="/publicacion/editar/" method="POST"  class="form-signin">
+                    <form action="/publicacion/editar/" method="POST" id="formulario-publicacion"  class="form-signin">
                         <br>
 
                         <input name="publicacion" type="hidden" value="${publicacion.id}">
@@ -27,7 +27,7 @@
                                 </select>
                                 <br>
                                 <label for="anio">Año</label>
-                                <input  name="anio" type="text" id="anio" class="form-control" placeholder="Digite el año..."  required="" value="${publicacion.anio?c}" autofocus="">
+                                <input  name="anio" type="number" id="anio" class="form-control" placeholder="Digite el año..."  required="" value="${publicacion.anio?c}" autofocus="">
                                 <br>
                                 <label for="pasajeros">Cantidad de pasajeros</label>
                                 <input  name="pasajeros" type="text" id="pasajeros" class="form-control" value="${publicacion.pasajeros}" placeholder="Digite los pasajeros..."  required="" autofocus="">
@@ -87,7 +87,7 @@
                                 <label for="precio">Precio</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">RD$</span>
-                                    <input  name="precio" type="text" id="precio" class="form-control"   required="" value="${publicacion.precioVehiculo?c}" autofocus="">
+                                    <input  name="precio" type="number" id="precio" class="form-control"   required="" value="${publicacion.precioVehiculo?c}" autofocus="">
                                 </div>
                                 <br>
 
@@ -99,11 +99,11 @@
                                 <label for="uso">Uso (KM)</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">KM</span>
-                                    <input  name="uso" type="text" id="uso" class="form-control" placeholder="Digite el kilometraje..." value="${publicacion.uso?c}"  required="" autofocus="">
+                                    <input  name="uso" type="number" id="uso" class="form-control" placeholder="Digite el kilometraje..." value="${publicacion.uso?c}"  required="" autofocus="">
                                 </div>
                                 <br>
                                 <label for="cilindros">Cantidad de cilindros</label>
-                                <input  name="cilindros" type="text" id="cilindros" class="form-control" placeholder="Digite los cilindros..." value="${publicacion.cilindros?c}"  required="" autofocus="">
+                                <input  name="cilindros" type="number" id="cilindros" class="form-control" placeholder="Digite los cilindros..." value="${publicacion.cilindros?c}"  required="" autofocus="">
                                 <br>
                                 <label for="transmision">Tipo de Transmisión</label>
                                 <select class="form-control"   name="transmision"  id="transmision">
