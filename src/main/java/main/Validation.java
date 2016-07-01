@@ -1,5 +1,7 @@
 package main;
 
+import modelos.Publicacion;
+import servicios.PublicacionServicios;
 import servicios.UsuarioServicios;
 import spark.Request;
 
@@ -51,6 +53,9 @@ public class Validation {
     public boolean usuarioExiste(String usuario){
         return UsuarioServicios.getInstancia().find(usuario) != null;
     }
+    public boolean publicacionExiste(String publicacion){
+        return PublicacionServicios.getInstancia().find(Integer.parseInt(publicacion)) != null;
+    }
 
     public boolean validarPublicacion(Request request, boolean editando){
         if(request.queryParams("marca") == null || request.queryParams("modelo") == null || request.queryParams("anio") == null||
@@ -62,6 +67,34 @@ public class Validation {
         }
 
         if(!isInteger(request.queryParams("dias")) || !isInteger(request.queryParams("uso")) ||
+                !isInteger(request.queryParams("cilindros")) || !isInteger(request.queryParams("anio")) ||
+                !isInteger(request.queryParams("pasajeros"))){
+            System.out.println("bad integer value");
+            return  false;
+        }
+
+
+
+
+
+        return true;
+    }
+
+    public boolean validarEdicionPublicacion(Request request, boolean editando){
+        System.out.print(request.queryParams("publicacion"));
+        if(request.queryParams("publicacion") == null)
+            return false;
+        if (!publicacionExiste(request.queryParams("publicacion")))
+            return false;
+        if(request.queryParams("marca") == null || request.queryParams("modelo") == null || request.queryParams("anio") == null||
+                request.queryParams("uso") == null || request.queryParams("pasajeros") ==null || request.queryParams("cilindros") == null ||
+                request.queryParams("combustible") == null || request.queryParams("transmision") == null || request.queryParams("observaciones") == null||
+                 request.queryParams("tipo") == null){
+            System.out.println("Null value");
+            return false;
+        }
+
+        if( !isInteger(request.queryParams("uso")) ||
                 !isInteger(request.queryParams("cilindros")) || !isInteger(request.queryParams("anio")) ||
                 !isInteger(request.queryParams("pasajeros"))){
             System.out.println("bad integer value");

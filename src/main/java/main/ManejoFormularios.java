@@ -259,7 +259,33 @@ public class ManejoFormularios {
 
             return "OK";
         });
+
+        post("/publicacion/editar/", (request, response) -> {
+            if(!Validation.getInstancia().validarEdicionPublicacion(request,true))
+                return "Formulario invalido. Por favor no invente.";
+
+            Publicacion publicacion = PublicacionServicios.getInstancia().find(Integer.parseInt(request.queryParams("publicacion")));
+
+
+            publicacion.setAnio(Integer.parseInt(request.queryParams("anio")));
+            publicacion.setPasajeros(Integer.parseInt(request.queryParams("pasajeros")));
+            publicacion.setUso(Integer.parseInt(request.queryParams("uso")));
+            publicacion.setCilindros(Integer.parseInt(request.queryParams("cilindros")));
+            publicacion.setCombustible(request.queryParams("combustible"));
+            publicacion.setMarca(MarcaServicios.getInstancia().find(Integer.parseInt(request.queryParams("marca"))));
+            publicacion.setModelo(request.queryParams("modelo"));
+            publicacion.setObservaciones(request.queryParams("observaciones"));
+            publicacion.setTransmision(request.queryParams("transmision"));
+            publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));
+            publicacion.setTipo(TipoServicios.getInstancia().find(Integer.parseInt(request.queryParams("tipo"))));
+
+            PublicacionServicios.getInstancia().edit(publicacion);
+            response.redirect("/");
+            return "OK";
+        });
     }
+
+
 
      public static Date sumarDias(Date date, int days)
         {
