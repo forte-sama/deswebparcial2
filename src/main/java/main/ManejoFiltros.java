@@ -37,6 +37,14 @@ public class ManejoFiltros {
             }
         });
 
+        before("/publicacion/crear/",(request, response) -> {
+            Usuario usuario=request.session().attribute("usuario");
+            if(usuario == null||usuario.getAutorizado()==false){
+                response.redirect("/");
+            }
+        });
+
+
 
 
     }
