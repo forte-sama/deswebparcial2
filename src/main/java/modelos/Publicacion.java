@@ -32,6 +32,15 @@ public class Publicacion implements Serializable {
     private Integer cilindros;
     @Column(columnDefinition = "VARCHAR(300)")
     private String Observaciones;
+    private Boolean vendido;
+
+    public Boolean isVendido() {
+        return vendido;
+    }
+
+    public void setVendido(Boolean vendido) {
+        this.vendido = vendido;
+    }
 
     public Integer getId() {
         return id;

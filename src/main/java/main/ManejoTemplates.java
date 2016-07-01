@@ -7,7 +7,6 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 import static spark.Spark.get;
@@ -29,7 +28,7 @@ public class ManejoTemplates {
                 data.put("usuario",usuario_loguiado);
 
             //obtener las publicaciones que cumplan con los filtros
-            data.put("publicaciones",filtrarPublicaciones(req));
+            data.put("datos_publicaciones", datosPublicaciones(req));
             data.put("opciones",obtenerOpcionesFiltros());
 
             return new ModelAndView(data,"publicacion_lista.ftl");
@@ -327,24 +326,37 @@ public class ManejoTemplates {
         return opciones;
     }
 
-    private static List<Publicacion> filtrarPublicaciones(Request req) {
+    private static HashMap<String,Object> datosPublicaciones(Request req) {
         //obtener criterios aunque tengan valor default (default no filtra nada)
         Set<String> rawCriterios = req.queryParams();
         //lista de criterios curados (solo los que no estan en default)
         HashMap<String,String> criteriosUsados = new HashMap<>();
-
+        //filtrar criterios que tienen valor por defecto
         for(String criterio : rawCriterios) {
-            String valorCriterio = req.queryParams(criterio);
-            //agregar si el valor del criterio actual no esta por default
-            if(!valorCriterio.toLowerCase().contentEquals("default")) {
+            String valorCriterio = req.queryParams(criterio).toLowerCase();
+            //agregar si el valor del criterio actual no esta por default y no es el numero de pagina
+            if(criterio.contentEquals("page_num")) {
+                continue;
+            }
+
+            if(!valorCriterio.contentEquals("default")) {
                 criteriosUsados.put(criterio,valorCriterio);
             }
         }
+        //obtener numero de pagina
+        String rawNumPagina = req.queryParams("page_num");
+        int numPagina;
+        //valor numerico de la pagina
+        try {
+            //para evitar tomar numero de pagina como negativo
+            numPagina = Math.max(1,Integer.parseInt(rawNumPagina));
+        } catch (NumberFormatException e) {
+            numPagina = 1;
+        } catch (NullPointerException e) {
+            numPagina = 1;
+        }
 
-        List<Publicacion> resp = PublicacionServicios.getInstancia().findBy(criteriosUsados);
-
-        return resp;
+        //retornar publicaciones filtradas y paginacion si es posible
+        return PublicacionServicios.getInstancia().filtrarPublicaciones(criteriosUsados,numPagina);
     }
-
-
 }
