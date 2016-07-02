@@ -19,7 +19,7 @@
 
                 <#if usuario_sesion??>
                     <#if usuario_sesion.autorizado >
-                        <li class="active"><a href=""><span class="glyphicon glyphicon-th-list"></span>  Mis publicaciones</a></li>
+                        <li class="active"><a href="/usuario/publicaciones/"><span class="glyphicon glyphicon-th-list"></span>  Mis publicaciones</a></li>
                         <li class="active"><a href="/publicacion/crear/"><span class="glyphicon glyphicon-pencil">  Publicar</span></a></li>
                     </#if>
                     <#if usuario_sesion.admin >

@@ -16,7 +16,7 @@ import java.util.*;
 public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
     private static PublicacionServicios instancia;
 
-    private static final int pageSize = 3;
+    private static final int pageSize = 6;
 
     private PublicacionServicios() {
         super(Publicacion.class);
@@ -29,7 +29,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
         return instancia;
     }
 
-    public HashMap<String,Object> filtrarPublicaciones(HashMap<String, String> criterios, int pagina,String url) {
+    public HashMap<String,Object> filtrarPublicaciones(HashMap<String, String> criterios, int pagina,String url,Usuario user) {
         HashMap<String,Object> resp = new HashMap<>();
 
         EntityManager em = getEntityManager();
@@ -45,7 +45,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
             String str_condiciones_query = "FROM Publicacion p WHERE p.vendido = false";
             //construccion de string de query de conteo de paginas (saber si hay pagina anterior y sigte)
             //solo agregar clausula WHERE si tiene algun criterio
-            if(criterios.size() > 0) {
+            if(criterios.size() > 0  || user != null) {
                 str_condiciones_query += " AND";
             }
             //concatenar criterio e indicar que ya se ha concatenado (para usar AND)
@@ -53,6 +53,12 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 str_condiciones_query += " p.combustible = :combustible";
 
                 urlParams += "&combustible="+criterios.get("combustible");
+                yaConcateno = true;
+            }
+            if(user != null) {
+                String and = yaConcateno? " AND" : "";
+
+                str_condiciones_query += and + " p.usuario = :user";
                 yaConcateno = true;
             }
             //concatenar criterio e indicar que ya se ha concatenado
@@ -128,6 +134,11 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
 //            query.setParameter("hoy",new Date());
 //            query_conteo.setParameter("hoy",new Date());
 
+
+            if(user != null) {
+                query.setParameter("user",user);
+                query_conteo.setParameter("user",user);
+            }
             //asignar valores de los criterios si estan presentes
             if(criterios.containsKey("combustible")) {
                 query.setParameter("combustible",criterios.get("combustible"));
@@ -178,8 +189,14 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 imgs.add(ImagenServicios.getInstancia().findByPublicacionId(pub.getId()).get(0).getRuta());
             }
 
-            resp.put("publicaciones",pubs);
-            resp.put("rutas_imagenes_publicaciones",imgs);
+            if(pubs.size() > 0) {
+                resp.put("publicaciones", pubs);
+                resp.put("rutas_imagenes_publicaciones", imgs);
+
+                if (imgs.size() == 0) {
+                    resp.put("hay_imagenes", true);
+                }
+            }
 
             //pagina anterior
             resp.put("hay_pagina_anterior", pagina > 1);

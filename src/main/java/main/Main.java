@@ -12,7 +12,7 @@ public class Main {
         String staticDir = "/src/main/resources/public";
         externalStaticFileLocation(projectDir+staticDir);
         //agregar pantalla de debug
-        enableDebugScreen();
+//        enableDebugScreen();
         //inicializar servicio H2
         DBService.inicializar();
         //inicializar precio base si es primera vez

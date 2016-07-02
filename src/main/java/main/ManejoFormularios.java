@@ -209,6 +209,7 @@ public class ManejoFormularios {
             publicacion.setCombustible(request.queryParams("combustible"));
             publicacion.setMarca(MarcaServicios.getInstancia().find(Integer.parseInt(request.queryParams("marca"))));
             publicacion.setModelo(request.queryParams("modelo"));
+            publicacion.setVendido(false);
             publicacion.setObservaciones(request.queryParams("observaciones"));
             publicacion.setTransmision(request.queryParams("transmision"));
             publicacion.setPrecioVehiculo(Double.parseDouble(request.queryParams("precio")));

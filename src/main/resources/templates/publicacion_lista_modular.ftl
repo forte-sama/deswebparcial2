@@ -1,4 +1,5 @@
 <div class="row">
+    <#if nunca_filtro??>
     <div class="col col-lg-4">
         <form id="form-filtro" method="get">
             <div class="list-group">
@@ -99,6 +100,7 @@
             </div>
         </form>
     </div>
+    </#if>
     <div class="col col-lg-8">
         <div class="col col-lg-12">
             <#if datos_publicaciones["hay_pagina_anterior"] == true>
@@ -114,6 +116,7 @@
         </div>
         <div class="row">
             <hr />
+            <#if datos_publicaciones["publicaciones"]??>
             <#list 0..datos_publicaciones["publicaciones"]?size-1 as i>
             <div class="col col-lg-4">
                 <div class="thumbnail">
@@ -127,13 +130,20 @@
                         <div class="col col-lg-6">
                             <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">Ver</a>
                         </div>
+                        <#if usuario_sesion?? && datos_publicaciones["publicaciones"][i].getUsuario().getUsername() == usuario_sesion.getUsername()>
                         <div class="col col-lg-6">
                             <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Vender</a>
                         </div>
+                        <div class="col col-lg-12">
+                            <hr />
+                            <a href="/publicacion/editar/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Editar</a>
+                        </div>
+                        </#if>
                     </div>
                 </div>
             </div>
             </#list>
+            </#if>
         </div>
     </div>
 </div>

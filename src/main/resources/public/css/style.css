@@ -89,6 +89,9 @@ img#imagen-modal {
     color:#00CC00; /* green */
 }
 
+.thumbnail {
+    height: 300px;
+}
 
 
 

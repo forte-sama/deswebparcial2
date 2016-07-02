@@ -29,7 +29,20 @@ public class ManejoTemplates {
                 data.put("usuario_sesion",usuario_loguiado);
 
             //obtener las publicaciones que cumplan con los filtros
-            data.put("datos_publicaciones", datosPublicaciones(req));
+            data.put("datos_publicaciones", datosPublicaciones(req,null));
+            data.put("opciones",obtenerOpcionesFiltros());
+
+            return new ModelAndView(data,"publicacion_lista.ftl");
+        }, new FreeMarkerEngine(conf));
+
+        get("/usuario/publicaciones/", (req, res) -> {
+            HashMap<String,Object> data = new HashMap<>();
+            Usuario usuario_loguiado = req.session().attribute("usuario");
+            if(usuario_loguiado != null)
+                data.put("usuario_sesion",usuario_loguiado);
+
+            //obtener las publicaciones que cumplan con los filtros
+            data.put("datos_publicaciones", datosPublicaciones(req,usuario_loguiado));
             data.put("opciones",obtenerOpcionesFiltros());
 
             return new ModelAndView(data,"publicacion_lista.ftl");
@@ -326,13 +339,15 @@ public class ManejoTemplates {
             String p = req.params("publicacion");
             if(!Validation.getInstancia().publicacionExiste(p)){
                 res.redirect("/");
-                return null;
             }
 
             Publicacion publicacion =  PublicacionServicios.getInstancia().find(Integer.parseInt(p));
             publicacion.setVendido(true);
             PublicacionServicios.getInstancia().edit(publicacion);
-            return  "OK";
+
+            res.redirect("/usuario/publicaciones/");
+
+            return "";
         });
     }
 
@@ -363,7 +378,7 @@ public class ManejoTemplates {
         return opciones;
     }
 
-    private static HashMap<String,Object> datosPublicaciones(Request req) {
+    private static HashMap<String,Object> datosPublicaciones(Request req,Usuario user) {
         //obtener criterios aunque tengan valor default (default no filtra nada)
         Set<String> rawCriterios = req.queryParams();
         //lista de criterios curados (solo los que no estan en default)
@@ -394,6 +409,6 @@ public class ManejoTemplates {
         }
 
         //retornar publicaciones filtradas y paginacion si es posible
-        return PublicacionServicios.getInstancia().filtrarPublicaciones(criteriosUsados,numPagina,req.url());
+        return PublicacionServicios.getInstancia().filtrarPublicaciones(criteriosUsados,numPagina,req.url(),user);
     }
 }
