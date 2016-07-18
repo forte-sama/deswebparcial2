@@ -112,13 +112,11 @@ public class ManejoAjax {
             if(!validoPubId || !validoUsuario || !validoCuerpo) {
                 return "";
             }
-
             //construir nuevo comentario
             Comentario comentario = new Comentario();
             comentario.setCuerpo(cuerpo);
             comentario.setUsuario(usuario);
             comentario.setPadre(null);
-
             try {
                 Integer idPublicacion = Integer.parseInt(rawIdPublicacion);
                 //publicacion correspondiente
@@ -129,7 +127,6 @@ public class ManejoAjax {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-
             if(rawIdComentarioPadre != null) {
                 try {
                     //seguir construyendo nuevo comentario
@@ -144,10 +141,8 @@ public class ManejoAjax {
                     e.printStackTrace();
                 }
             }
-
             //persistir nuevo comentario
             ComentarioServicios.getInstancia().create(comentario);
-
             //redireccionar a ruta que genera template de comentarios
             res.redirect("/comentarios/ver/" + rawIdPublicacion + "/");
 

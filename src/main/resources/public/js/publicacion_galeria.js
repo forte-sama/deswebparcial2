@@ -101,7 +101,7 @@ function postearComentario(datos_formulario) {
             }
         },
         error: function () {
-            $("#seccion-comentarios").html("<p>Ocurrio un error grave tratando de buscar comentarios</p>");
+            $("#seccion-comentarios").html("<p>Ocurrio un error al de buscar comentarios</p>");
         }
     });
 }
