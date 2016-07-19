@@ -12,6 +12,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>${pub.getMarca().getNombre()} ${pub.getModelo()} ${pub.getAnio()?string["0"]}</h3>
+                    <#if usuario_sesion?? && usuario_sesion.getUsername() == pub.getUsuario().getUsername()>
+                    <a href="/publicacion/editar/${pub.getId()}/" class="btn btn-warning">Editar</a>
+                    </#if>
                 </div>
                 <div class="panel-body">
                     <div class="row">

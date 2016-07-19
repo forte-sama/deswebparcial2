@@ -1,5 +1,4 @@
 <div class="row">
-    <#if nunca_filtro??>
     <div class="col col-lg-4">
         <form id="form-filtro" method="get">
             <div class="list-group">
@@ -91,59 +90,71 @@
                     <p class="list-group-item-text">
                         <select class="form-control" name="tipo">
                             <option value="default" selected>---</option>
-                            <#list opciones["tipos"] as tipo>
+                        <#list opciones["tipos"] as tipo>
                             <option value="${tipo}">${tipo}</option>
-                            </#list>
+                        </#list>
                         </select>
                     </p>
                 </a>
             </div>
         </form>
     </div>
-    </#if>
+    <#--<#if hay_imagenes??>-->
     <div class="col col-lg-8">
-        <div class="col col-lg-12">
-            <#if datos_publicaciones["hay_pagina_anterior"] == true>
-            <div class="col col-lg-3 pull-left">
-                <a class="btn btn-default btn-block" href="${datos_publicaciones["url_anterior"]}">Anterior</a>
-            </div>
-            </#if>
-            <#if datos_publicaciones["hay_pagina_siguiente"] == true>
-            <div class="col col-lg-3 pull-right">
-                <a class="btn btn-default btn-block" href="${datos_publicaciones["url_siguiente"]}">Siguiente</a>
-            </div>
-            </#if>
-        </div>
+        <#if datos_publicaciones["vacio"]??>
         <div class="row">
-            <hr />
-            <#if datos_publicaciones["publicaciones"]??>
-            <#list 0..datos_publicaciones["publicaciones"]?size-1 as i>
-            <div class="col col-lg-4">
-                <div class="thumbnail">
-                    <#-- obtener primera imagen -->
-                    <img class="imagen-item-publicacion" src="${datos_publicaciones["rutas_imagenes_publicaciones"][i]}" alt="..." height="250">
-                    <div class="caption row">
-                        <div class="col col-lg-12">
-                            <p>${datos_publicaciones["publicaciones"][i].getModelo()} <i>${datos_publicaciones["publicaciones"][i].getAnio()?string["0"]}</i></p>
-                            <p><b>RD$ ${datos_publicaciones["publicaciones"][i].getPrecioVehiculo()}</b></p>
-                        </div>
-                        <div class="col col-lg-6">
-                            <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">Ver</a>
-                        </div>
-                        <#if usuario_sesion?? && datos_publicaciones["publicaciones"][i].getUsuario().getUsername() == usuario_sesion.getUsername()>
-                        <div class="col col-lg-6">
-                            <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Vender</a>
-                        </div>
-                        <div class="col col-lg-12">
-                            <hr />
-                            <a href="/publicacion/editar/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Editar</a>
-                        </div>
-                        </#if>
-                    </div>
+            <div class="col col-lg-12">
+                <div class="alert alert-danger texto-centrado">
+                    <h3>No hay publicaciones</h3>
                 </div>
             </div>
-            </#list>
-            </#if>
         </div>
+        <#else>
+        <div class="row">
+            <div class="col col-lg-12">
+            <#if datos_publicaciones["url_anterior"]??>
+                <div class="col col-lg-3 pull-left">
+                    <a class="btn btn-default btn-block" href="${datos_publicaciones["url_anterior"]}"><-- Anterior</a>
+                </div>
+            </#if>
+            <#if datos_publicaciones["url_siguiente"]??>
+                <div class="col col-lg-3 pull-right">
+                    <a class="btn btn-default btn-block" href="${datos_publicaciones["url_siguiente"]}">Siguiente --></a>
+                </div>
+            </#if>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <hr />
+                <#if datos_publicaciones["publicaciones"]??>
+                <#list 0..datos_publicaciones["publicaciones"]?size-1 as i>
+                    <div class="col col-lg-4">
+                        <div class="thumbnail">
+                            <img class="img-responsive" src="${datos_publicaciones["rutas_imagenes_publicaciones"][i]}" alt="..." height="250">
+                            <div class="caption row">
+                                <div class="col col-lg-12">
+                                    <p>
+                                        ${datos_publicaciones["publicaciones"][i].getModelo()} <i>${datos_publicaciones["publicaciones"][i].getAnio()?string["0"]}</i>
+                                        <b>RD$ ${datos_publicaciones["publicaciones"][i].getPrecioVehiculo()}</b>
+                                    </p>
+                                </div>
+                                <div class="col col-lg-6">
+                                    <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">Ver</a>
+                                </div>
+                                <#if usuario_sesion?? && datos_publicaciones["publicaciones"][i].getUsuario().getUsername() == usuario_sesion.getUsername()>
+                                <div class="col col-lg-6">
+                                    <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">Vender</a>
+                                </div>
+                                </#if>
+                            </div>
+                        </div>
+                    </div>
+                </#list>
+                </#if>
+            </div>
+        </div>
+        </#if>
     </div>
+    <#--</#if>-->
 </div>

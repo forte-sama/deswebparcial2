@@ -8,6 +8,9 @@ import modelos.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.*;
 
 /**
@@ -16,7 +19,7 @@ import java.util.*;
 public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
     private static PublicacionServicios instancia;
 
-    private static final int pageSize = 6;
+    private static final int pageSize = 3;
 
     private PublicacionServicios() {
         super(Publicacion.class);
@@ -29,7 +32,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
         return instancia;
     }
 
-    public HashMap<String,Object> filtrarPublicaciones(HashMap<String, String> criterios, int pagina,String url,Usuario user) {
+    public HashMap<String,Object> filtrarPublicaciones(HashMap<String, String> criterios, int pagina,String url,Usuario user,boolean ownership) {
         HashMap<String,Object> resp = new HashMap<>();
 
         EntityManager em = getEntityManager();
@@ -42,7 +45,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
             boolean yaConcateno = false;
             //construccion de string del query
             //estado base
-            String str_condiciones_query = "FROM Publicacion p WHERE p.vendido = false";
+            String str_condiciones_query = "FROM Publicacion p WHERE p.vendido = false AND p.fechaFin >= :hoy";
             //construccion de string de query de conteo de paginas (saber si hay pagina anterior y sigte)
             //solo agregar clausula WHERE si tiene algun criterio
             if(criterios.size() > 0  || user != null) {
@@ -55,7 +58,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 urlParams += "&combustible="+criterios.get("combustible");
                 yaConcateno = true;
             }
-            if(user != null) {
+            if(user != null && ownership) {
                 String and = yaConcateno? " AND" : "";
 
                 str_condiciones_query += and + " p.usuario = :user";
@@ -66,7 +69,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 String and = yaConcateno? " AND" : "";
 
                 urlParams += yaConcateno? "&" : "";
-                urlParams += "anio_desde="+criterios.get("anio_desde");
+                urlParams += "anio_desde=" + criterios.get("anio_desde");
 
                 str_condiciones_query += and + " p.anio >= :anio_desde";
 
@@ -77,7 +80,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 String and = yaConcateno? " AND" : "";
 
                 urlParams += yaConcateno? "&" : "";
-                urlParams += "anio_hasta="+criterios.get("anio_hasta");
+                urlParams += "anio_hasta=" + criterios.get("anio_hasta");
 
                 str_condiciones_query += and + " p.anio <= :anio_hasta";
                 yaConcateno = true;
@@ -97,7 +100,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 String and = yaConcateno? " AND" : "";
 
                 urlParams += yaConcateno? "&" : "";
-                urlParams += "precio_hasta="+criterios.get("precio_hasta");
+                urlParams += "precio_hasta=" + criterios.get("precio_hasta");
 
                 str_condiciones_query += and + " p.precioVehiculo <= :precio_hasta";
                 yaConcateno = true;
@@ -107,7 +110,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                 String and = yaConcateno? " AND" : "";
 
                 urlParams += yaConcateno? "&" : "";
-                urlParams += "marca="+criterios.get("marca");
+                urlParams += "marca=" + criterios.get("marca");
 
                 str_condiciones_query += and + " p.marca.nombre = :marca";
                 yaConcateno = true;
@@ -131,11 +134,10 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
             TypedQuery<Long> query_conteo = em.createQuery(str_conteo_paginas, Long.class);
 
             //setear fecha
-//            query.setParameter("hoy",new Date());
-//            query_conteo.setParameter("hoy",new Date());
+            query.setParameter("hoy",new Date());
+            query_conteo.setParameter("hoy",new Date());
 
-
-            if(user != null) {
+            if(user != null && ownership) {
                 query.setParameter("user",user);
                 query_conteo.setParameter("user",user);
             }
@@ -197,13 +199,18 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
                     resp.put("hay_imagenes", true);
                 }
             }
+            else {
+                resp.put("vacio",true);
+            }
 
             //pagina anterior
-            resp.put("hay_pagina_anterior", pagina > 1);
-            resp.put("url_anterior", url + "?page_num=" + (pagina - 1) + urlParams);
+            if(pagina > 1) {
+                resp.put("url_anterior", url + "?page_num=" + (pagina - 1) + urlParams);
+            }
             //pagina siguiente
-            resp.put("hay_pagina_siguiente", count_pages > pagina);
-            resp.put("url_siguiente", url + "?page_num=" + (pagina + 1) + urlParams);
+            if(count_pages > pagina) {
+                resp.put("url_siguiente", url + "?page_num=" + (pagina + 1) + urlParams);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {

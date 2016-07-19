@@ -123,15 +123,15 @@ public class ManejoFormularios {
             Session session=request.session(true);
             Usuario usuario = UsuarioServicios.getInstancia().find(request.queryParams("username"));
 
-            if (usuario==null ||!request.queryParams("password").equals(usuario.getPassword())){
-                halt(401,"Credenciales no validas...");
-                return "fail";
+            if (usuario==null || !request.queryParams("password").equals(usuario.getPassword())){
+                response.redirect("/login/");
             }
             else {
                 session.attribute("usuario", usuario);
                 response.redirect("/");
-                return "success";
             }
+
+            return "success";
         });
 
         post("/cerrarsesion/", (request, response) -> {
