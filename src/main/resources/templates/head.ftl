@@ -4,7 +4,7 @@
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/css/font-awesome.css">
 <link type="text/css" rel="stylesheet" href="/css/style.css">
-<title>Parcial 2</title>
+<title>Final Web</title>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/jquery.maskedinput.min.js"></script>

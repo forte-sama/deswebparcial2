@@ -1,16 +1,11 @@
 package servicios;
 
 import main.EntityManagerCRUD;
-import modelos.Comentario;
-import modelos.Imagen;
 import modelos.Publicacion;
 import modelos.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.*;
 
 /**
@@ -19,7 +14,7 @@ import java.util.*;
 public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
     private static PublicacionServicios instancia;
 
-    private static final int pageSize = 3;
+    private static final int pageSize = 6;
 
     private PublicacionServicios() {
         super(Publicacion.class);
@@ -181,7 +176,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
             query.setMaxResults(pageSize);
 
             //conteo de publicaciones segun criterios
-            long count_pages = conteoSegunQuery(query_conteo);
+            long count_pages = contarResultadosFiltro(query_conteo);
 
             List<Publicacion> pubs = query.getResultList();
             List<String> imgs = new ArrayList<>();
@@ -220,7 +215,7 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
         return resp;
     }
 
-    private long conteoSegunQuery(TypedQuery<Long> query_conteo) {
+    private long contarResultadosFiltro(TypedQuery<Long> query_conteo) {
         Long cantPublicacionesFiltradas = query_conteo.getSingleResult();
         Long x = (long)Math.ceil((double)cantPublicacionesFiltradas / (double)pageSize);
         return x;

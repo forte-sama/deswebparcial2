@@ -117,7 +117,7 @@
 
 
                         <br><br>
-                        <button style="border-radius: 15px" class="btn btn-lg btn-primary btn-block" type="submit"> Registrar</button>
+                        <button style="border-radius: 15px" class="btn btn-lg btn-primary btn-block" type="submit"> Crear Publicacion</button>
                     </form>
                 </div>
             </div>

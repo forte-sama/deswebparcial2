@@ -89,14 +89,18 @@ img#imagen-modal {
 }
 
 .thumbnail {
-    max-height: 250px;
+    height: 220px;
+    max-height: 220px;
 }
 
 .thumbnail img {
+    height: 100px;
     max-height: 100px;
 }
 
-
+.overflowable {
+    overflow-x: scroll;
+}
 
 
 

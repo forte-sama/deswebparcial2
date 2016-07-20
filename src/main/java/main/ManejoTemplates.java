@@ -7,7 +7,6 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 import static spark.Spark.get;
