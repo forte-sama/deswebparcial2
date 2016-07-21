@@ -44,13 +44,12 @@ public class RestServicios {
         }, json());
 
         get("/restServices/tipos", (req, res) -> {
+            List<Tipo> tipos = TipoServicios.getInstancia().findAll();
 
-                List<Tipo> tipos = TipoServicios.getInstancia().findAll();
-                return tipos;
-
+            return tipos;
         }, json());
+
         get("/restServices/publicaciones", (req, res) -> {
-            formatPublicaciones();
             return formatPublicaciones() ;
         }, json());
 
@@ -61,8 +60,20 @@ public class RestServicios {
             long maxFileSize = 5000000;
             long maxRequestSize = 5000000;
             int fileSizeThreshold = 1024;
+
+
             MultipartConfigElement multipartConfigElement = new MultipartConfigElement(location, maxFileSize, maxRequestSize, fileSizeThreshold);
             request.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+            Gson gson = new Gson();
+            if(!Validation.getInstancia().validarPublicacion(request,true)){
+
+                Mensaje msg = new Mensaje();
+                msg.setCodigo("1");
+                msg.setMensaje("Formulario Invalido.");
+                System.out.println("Invalid");
+                System.out.print(gson.toJson(msg));
+                return msg;
+            }
             Publicacion publicacion = new Publicacion();
             publicacion.setFechaInicio(new Date());
             publicacion.setFechaFin(sumarDias(publicacion.getFechaInicio(),Integer.parseInt(request.queryParams("dias"))));
@@ -114,9 +125,12 @@ public class RestServicios {
 
             }
 
+            Mensaje msg = new Mensaje();
+            msg.setCodigo("0");
+            msg.setMensaje("Exito");
+            System.out.println(gson.toJson(msg));
+            return msg;
 
-
-            return "OK";
         },json());
         after("/restServices/*",(req, res) -> {
             res.type("application/json");
