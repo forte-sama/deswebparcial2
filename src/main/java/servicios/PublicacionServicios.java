@@ -8,6 +8,8 @@ import modelos.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.*;
 
 /**
@@ -217,5 +219,22 @@ public class PublicacionServicios extends EntityManagerCRUD<Publicacion> {
         Long cantPublicacionesFiltradas = query_conteo.getSingleResult();
         Long x = (long)Math.ceil((double)cantPublicacionesFiltradas / (double)pageSize);
         return x;
+    }
+
+    public List<Publicacion> findAllPublicaciones(){
+        EntityManager em = getEntityManager();
+
+        try{
+            CriteriaQuery<Publicacion> criteriaQuery = em.getCriteriaBuilder().createQuery(Publicacion.class);
+            Root<Publicacion> personRoot = criteriaQuery.from( Publicacion.class );
+            criteriaQuery.select(personRoot);
+            criteriaQuery.where(em.getCriteriaBuilder().equal(personRoot.get("vendido"),false));
+
+            return em.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex){
+            throw  ex;
+        }finally {
+            em.close();
+        }
     }
 }

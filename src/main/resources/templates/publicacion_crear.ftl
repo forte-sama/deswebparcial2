@@ -3,7 +3,7 @@
 <head>
     <#include "head.ftl">
 </head>
-<body>
+<body>1
 <#include "nav.ftl">
 <div id="contenido" class="container">
     <div class="row">

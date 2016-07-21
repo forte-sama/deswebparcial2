@@ -128,7 +128,7 @@
                             <p><b>RD$ ${datos_publicaciones["publicaciones"][i].getPrecioVehiculo()}</b></p>
                         </div>
                         <div class="col col-lg-6">
-                            <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">Ver</a>
+                            <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()?c}/" class="btn btn-primary btn-block">Ver</a>
                         </div>
                         <#if usuario_sesion?? && datos_publicaciones["publicaciones"][i].getUsuario().getUsername() == usuario_sesion.getUsername()>
                         <div class="col col-lg-6">

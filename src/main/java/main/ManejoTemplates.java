@@ -298,7 +298,7 @@ public class ManejoTemplates {
 
         get("/publicacion/editar/:publicacion/", (req, res) -> {
             String p = req.params("publicacion");
-            if(!Validation.getInstancia().publicacionExiste(p)){
+            if(!Validation.getInstancia().publicacionExiste(p   )){
                 res.redirect("/");
                 return null;
             }
