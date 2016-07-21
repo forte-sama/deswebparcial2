@@ -1,3 +1,4 @@
+
 <form id="my_form" method="post" action="/cerrarsesion/">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -12,8 +13,9 @@
         </div>
 
         <div class="collapse navbar-collapse" id="navegacion">
-            <ul class="nav navbar-nav right">
+            <ul class="nav navbar-nav navbar-left">
                 <#if usuario_sesion??>
+                <span id="user_" class="hidden">${usuario_sesion.getUsername()}</span>
                 <#if usuario_sesion.autorizado >
                 <li class="active">
                     <a href="/usuario/publicaciones/">
@@ -58,6 +60,7 @@
                 <li><a href="/login/"><i class="fa fa-sign-in" aria-hidden="true"></i> Iniciar Sesión</a></li>
                 </#if>
             </ul>
+            <p id="last_login_place" class="navbar-text navbar-right"></p>
         </div>
     </div>
 </nav>
