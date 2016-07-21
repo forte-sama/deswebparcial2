@@ -145,7 +145,7 @@
                         <textarea class="form-control" rows="3" id="observaciones" name="observaciones" required="">${publicacion.observaciones}</textarea>
                         <br>
                         <br><br>
-                        <button style="border-radius: 15px" class="btn btn-lg btn-primary btn-block" type="submit">Registrar</button>
+                        <button style="border-radius: 15px" class="btn btn-lg btn-primary btn-block" type="submit">Editar Publicacion</button>
                     </form>
                 </div>
             </div>

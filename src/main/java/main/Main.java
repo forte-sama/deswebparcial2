@@ -2,6 +2,9 @@ package main;
 
 import servicios.RestServicios;
 import servicios.PrecioPublicacionServicios;
+import servicios.UsuarioServicios;
+
+import java.util.Date;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -13,11 +16,13 @@ public class Main {
         String staticDir = "/src/main/resources/public";
         externalStaticFileLocation(projectDir+staticDir);
         //agregar pantalla de debug
-//        enableDebugScreen();
+        enableDebugScreen();
         //inicializar servicio H2
         DBService.inicializar();
         //inicializar precio base si es primera vez
         PrecioPublicacionServicios.getInstancia().precioDefault();
+        //crear admin base si es primera vez
+        UsuarioServicios.getInstancia().crearAdminDefault();
 
         //iniciar manejador de templates (GET requests)
         ManejoTemplates.manejarTemplates();

@@ -47,4 +47,19 @@ public class UsuarioServicios extends EntityManagerCRUD<Usuario> {
 
         return resp;
     }
+
+    public void crearAdminDefault() {
+        Usuario admin = new Usuario();
+        admin.setAdmin(true);
+        admin.setAutorizado(true);
+        admin.setUsername("admin");
+        admin.setPassword("admin");
+        admin.setEmail("admin@sitio.com");
+        admin.setNombre("admin");
+        admin.setTelefono("809-555-5556");
+        admin.setCelular("809-555-5555");
+        admin.setDireccion("direccion admin");
+
+        this.edit(admin);
+    }
 }

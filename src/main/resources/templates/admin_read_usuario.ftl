@@ -14,8 +14,8 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col col-md-12">
-                            <table class="table">
+                        <div class="col col-md-12 overflowable">
+                            <table class="table table-responsive">
                                 <#--TODO colorear diferente los que sean admin-->
                                 <thead>
                                     <th>Username</th>
