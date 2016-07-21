@@ -164,13 +164,13 @@
                                     </p>
                                 </div>
                                 <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-primary btn-block">
+                                    <a href="/publicacion/ver/${datos_publicaciones["publicaciones"][i].getId()?c}/" class="btn btn-primary btn-block">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </a>
                                 </div>
                                 <#if usuario_sesion?? && datos_publicaciones["publicaciones"][i].getUsuario().getUsername() == usuario_sesion.getUsername()>
                                 <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()}/" class="btn btn-success btn-block">
+                                    <a href="/publicacion/vender/${datos_publicaciones["publicaciones"][i].getId()?c}/" class="btn btn-success btn-block">
                                         <i class="fa fa-usd" aria-hidden="true"></i>
                                     </a>
                                 </div>
